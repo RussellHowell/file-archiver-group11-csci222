@@ -12,9 +12,14 @@
 #include <QApplication>
 #include <QFile>
 #include <QDebug> 
+#include <fstream>
+#include <QByteArray>
+
+
 
 #ifndef FILEREC_H
 #define	FILEREC_H
+
 
 class FileRec
 {
