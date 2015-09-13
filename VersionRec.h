@@ -12,6 +12,8 @@
 #include <QFile>
 #include <QDebug> 
 
+#include <vector>
+
 #ifndef VERSIONREC_H
 #define	VERSIONREC_H
 
@@ -19,6 +21,14 @@
  {
         //timespec structure, as in FileRec.h
  };
+ 
+struct block_info
+{
+    qint64 block_num;
+    std::string hash;
+    qint64 block_length;
+    // byte array (compressed data for the file block)
+};
 
 class VersionRec
 {
@@ -29,28 +39,27 @@ private:
     qint64 length; //number of elements in record_collections
     timestruc modify_time;
   
-    
+    std::string hash;
     // hash member
     
-    // STL collection of blocks
-        // struct block
-            // qint64 block_num
-            // block hash
-            // qint64 block_length
-            // byte array (compressed data for the file block)
+    std::vector<block_info> blocks; 
+    //collection of blocks different in this version
     
 public:
     VersionRec();
-    Qstring getVersionID();
-    void setVersionID(Qstring);
+    QString getVersionID();
+    void setVersionID(QString);
     qint16 getVersionNum();
     void setVersionNum(qint16);
     qint64 getLength();
     void setLength(qint64);
-    modify_time getModifyTime();
+    
+    timestruc getModifyTime();
     void setModifyTime(timestruc);
-    // getHash
-    // setHash
+    
+    char * getHash();
+    void setHash(char *);
+    
     // getDiff
     // setDiff
     

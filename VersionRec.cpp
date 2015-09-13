@@ -15,12 +15,12 @@ VersionRec::VersionRec()
     
 };
 
-Qstring VersionRec::getVersionID()
+QString VersionRec::getVersionID()
 {
     return version_ID;
 };
 
-void VersionRec::setVersionID(Qstring id)
+void VersionRec::setVersionID(QString id)
 {
     version_ID = id;
 };
@@ -53,19 +53,28 @@ timestruc VersionRec::getModifyTime()
 void VersionRec::setModifyTime(timestruc)
 {
     // ...
-}
+};
 
- // getHash
- // setHash
+char * VersionRec::getHash()
+{
+    return hash;
+};
+
+void VersionRec::setHash(char * in)
+{
+    hash = in;
+};
+
+
  // getDiff
  // setDiff
 
-VersionRec::transferFromDB()
+void VersionRec::transferFromDB()
 {
     
 };
 
-VersionRec::transferToDB()
+void VersionRec::transferToDB()
 {
     
 };
