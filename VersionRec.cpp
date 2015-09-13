@@ -67,6 +67,12 @@ void VersionRec::setHash(char * in)
 
 
  // getDiff
+/*
+std::vector<block_info> VersionRec::getDiff()
+{
+   
+};*/
+
  // setDiff
 
 void VersionRec::transferFromDB()

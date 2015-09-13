@@ -25,7 +25,7 @@
 struct block_info
 {
     qint64 block_num;
-    std::string hash;
+    char * hash;
     qint64 block_length;
     // byte array (compressed data for the file block)
 };
@@ -39,7 +39,7 @@ private:
     qint64 length; //number of elements in record_collections
     timestruc modify_time;
   
-    std::string hash;
+    char * hash;
     // hash member
     
     std::vector<block_info> blocks; 
