@@ -28,6 +28,7 @@ struct block_info
     char * hash;
     qint64 block_length;
     // byte array (compressed data for the file block)
+    char * byte_array;
 };
 
 class VersionRec
@@ -60,8 +61,8 @@ public:
     char * getHash();
     void setHash(char *);
     
-    // getDiff
-    // setDiff
+    std::vector<block_info> getDiff();
+    void setDiff(qint64, char*, qint64, char*); //add one block at a time, creates block_info structure within
     
     void transferToDB();
     void transferFromDB();

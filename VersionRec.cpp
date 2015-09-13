@@ -67,11 +67,21 @@ void VersionRec::setHash(char * in)
 
 
  // getDiff
-/*
+
 std::vector<block_info> VersionRec::getDiff()
 {
-   
-};*/
+    return blocks;
+};
+
+void VersionRec::setDiff(qint64 num, char * hash, qint64 length, char * bytes)
+{
+    blocks.push_back(block_info());
+    blocks[blocks.size()-1].block_num = num;
+    blocks[blocks.size()-1].hash = hash;
+    blocks[blocks.size()-1].block_length = length;
+    blocks[blocks.size()-1].byte_array = bytes;
+    
+};
 
  // setDiff
 
