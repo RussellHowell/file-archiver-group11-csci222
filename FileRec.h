@@ -47,6 +47,7 @@ public:
     qint64 getLength();
     qint16 getVersionCount();
     void createData(QString path);
+    void readBlocks(std::string file_name);
     
 };
 

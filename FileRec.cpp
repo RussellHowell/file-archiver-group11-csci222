@@ -23,20 +23,13 @@ FileRec::FileRec()
 
 
 /* createData() takes a path to a file in the Unix system,
- * opens the file, sets the necessary data members, serializes the 
- * file and hashes each block.
+ * opens the file, sets the necessary data members, and calls readBlocks()
  */
 void FileRec::createData(QString path)
 {
     QFile mFile(path);
-    SHA256 sha256; //hashing object
     time_t current_time;
-    
-    char *buffer = new char[BLOCKSIZE];
-   
-    string string_file_name = path.toStdString();
-    ifstream file(string_file_name.c_str(), ios::in | ios::binary | ios::ate);
-    
+ 
     if(!mFile.open(QFile::ReadOnly))
     {
         qDebug()<<"The path or file specified does not exist";
@@ -57,9 +50,26 @@ void FileRec::createData(QString path)
     
     size_ = mFile.size();
     file_name_ = mFile.fileName(); //this will currently just assign the entire path to file_name
+     mFile.close();  
+     
+    readBlocks(path.toStdString());
+        
+};
+
+
+
+/* readBlocks() opens a filestream, reads 4k blocks one at a time, hashes them,
+ * stores hashes in an stl vector 
+ * (MOVE HASHES AND BLOCKS TO PERSISTENT MEMORY HERE) */
+void FileRec::readBlocks(string file_name)
+{
+    char *buffer = new char[BLOCKSIZE];
+    int iter = 0;
     
+    SHA256 sha256; //hashing object
     
-    qint64 iter = 0;
+    ifstream file(file_name.c_str(), ios::in | ios::binary | ios::ate);
+   
     //How many times a *full* block will be read
     int read_count = size_ / BLOCKSIZE; 
     
@@ -95,5 +105,4 @@ void FileRec::createData(QString path)
     }
     
     delete[] buffer; 
-    mFile.close(); 
 };
