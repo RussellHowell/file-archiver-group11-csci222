@@ -73,7 +73,7 @@ std::vector<block_info> VersionRec::getDiff()
     return blocks;
 };
 
-void VersionRec::setDiff(qint64 num, char * hash, qint64 length, char * bytes)
+void VersionRec::setDiff(qint64 num, char * hash, qint64 length, unsigned char * bytes)
 {
     blocks.push_back(block_info());
     blocks[blocks.size()-1].block_num = num;
