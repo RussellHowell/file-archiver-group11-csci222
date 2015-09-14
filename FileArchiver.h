@@ -7,30 +7,35 @@
 // * Last modified: September 5th, 2015
 // * Description:
 // * Purpose:
-#include <QtCore/QCoreApplication>
-#include <QApplication>
-#include <QFile>
-#include <QDebug> 
 
 #ifndef FILEARCHIVER_H
 #define	FILEARCHIVER_H
 
+#include "mysql_connection.h"
+#include "mysql_driver.h"
+
+#include <string>
+
 class FileArchiver
 {
-    
-private:
-   qint16 identifier;
 public:
     FileArchiver();
-    bool differs(QString file_name);
-    bool exists(QString file_name);
-    void insertNew(QString file_name, QString comment);
-    void update(QString file_name, QString comment);
-    //VersionRec retrieveVersion(int version_num, QString file_name, QString retrieve_to_filename);
-    
+    bool exists(std::string);
+    bool differs(std::string);
+    void insertNew(std::string, std::string);
+    void update(std::string, std::string);
+    VersionRec retrieveVersion(int version_num, QString file_name, QString retrieve_to_filename);
+    getCurrentVersion(std::string);
+    getHashOfLastSaved(std::string);
+    bool getComment(std::string, int);
+    getVersionInfo(std::string);
+    setReference(std::string, in, std::string);
+private:
+    sql::Connection *conn;
+    sql::Driver *driver;
 };
 
 
 
-#endif	/* FILEARCHIVER_H */
+#endif
 
