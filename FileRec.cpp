@@ -4,14 +4,16 @@
 // * Group 11
 // * 
 // * Author(s): Russell Howell
-// * Last modified: September 6th, 2015
+// * Last modified: September 13th, 2015
 // * Description: 
 // * Purpose:
 
 #include "FileRec.h"
 #define BLOCKSIZE 4000
 
+
 using namespace std;
+
 
 //Default Constructor
 FileRec::FileRec()
@@ -21,33 +23,53 @@ FileRec::FileRec()
 
 
 /* createData() takes a path to a file in the Unix system,
- * opens the file, sets the necessary data members, and serializes the 
- * file. 
+ * opens the file, sets the necessary data members, and calls readBlocks()
  */
 void FileRec::createData(QString path)
 {
     QFile mFile(path);
-    
+    time_t current_time;
+ 
     if(!mFile.open(QFile::ReadOnly))
     {
         qDebug()<<"The path or file specified does not exist";
         return;
     };
     
+    //Populate timespec structure
+    time(&current_time);
+    struct tm *local_time;
+    local_time = localtime( &current_time ); 
+     
+    timespec_.day = local_time->tm_mday;
+    timespec_.month = local_time->tm_mon + 1;
+    timespec_.year = local_time->tm_year + 1900;
+    timespec_.hour = local_time->tm_hour;
+    timespec_.minute = local_time->tm_min;
+    timespec_.second = local_time->tm_sec;
     
     size_ = mFile.size();
     file_name_ = mFile.fileName(); //this will currently just assign the entire path to file_name
-    qint64 iter = 0;
-    
-    
-    //declare two buffers, hashing will be done on q_buffer
+     mFile.close();  
+     
+    readBlocks(path.toStdString());
+        
+};
+
+
+
+/* readBlocks() opens a filestream, reads 4k blocks one at a time, hashes them,
+ * stores hashes in an stl vector 
+ * (MOVE HASHES AND BLOCKS TO PERSISTENT MEMORY HERE) */
+void FileRec::readBlocks(string file_name)
+{
     char *buffer = new char[BLOCKSIZE];
-    QByteArray q_buffer; 
+    int iter = 0;
+    
+    SHA256 sha256; //hashing object
+    
+    ifstream file(file_name.c_str(), ios::in | ios::binary | ios::ate);
    
-    string string_file_name = path.toStdString();
-    ifstream file(string_file_name.c_str(), ios::in | ios::binary | ios::ate);
-    
-    
     //How many times a *full* block will be read
     int read_count = size_ / BLOCKSIZE; 
     
@@ -58,12 +80,11 @@ void FileRec::createData(QString path)
         {
             file.seekg(iter, ios::beg);
             file.readsome(buffer, BLOCKSIZE);
-            q_buffer.insert(0, buffer, BLOCKSIZE);
             iter = iter + BLOCKSIZE; //Iterate through stream 4k at a time;
+            
+             block_hashes_.push_back(sha256(buffer, BLOCKSIZE));
         }
-        
-        
-        //HASH BLOCK  
+ 
         //MOVE BLOCK TO PERSISTENT STOARAGE
     }
     
@@ -77,13 +98,11 @@ void FileRec::createData(QString path)
         {
             file.seekg(iter, ios::beg);
             file.readsome(buffer, read_count); //read read_count bytes into buffer
-            q_buffer.insert(0, buffer, read_count); 
+         
+             block_hashes_.push_back(sha256(buffer, read_count));
         }
         
-        //HASH FINAL BLOCK
-        //MOVE FINAL BLOCK TO PERSISTENT STORAGE
     }
     
     delete[] buffer; 
-    mFile.close(); 
 };

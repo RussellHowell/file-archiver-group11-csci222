@@ -19,7 +19,7 @@
 
  struct timestruc
  {
-        //timespec structure, as in FileRec.h
+        //timespec structure to hold the data last modified, could be a string
  };
  
 struct block_info
@@ -28,7 +28,18 @@ struct block_info
     char * hash;
     qint64 block_length;
     // byte array (compressed data for the file block)
-    char * byte_array;
+    unsigned char * byte_array;
+    
+    
+    block_info() //struct constructor
+    {
+        byte_array = new unsigned char[4000];
+    }
+    
+    ~block_info() //struct destructor
+    {
+        delete byte_array;
+    }
 };
 
 class VersionRec
@@ -62,7 +73,7 @@ public:
     void setHash(char *);
     
     std::vector<block_info> getDiff();
-    void setDiff(qint64, char*, qint64, char*); //add one block at a time, creates block_info structure within
+    void setDiff(qint64, char*, qint64, unsigned char*); //add one block at a time, creates block_info structure within
     
     void transferToDB();
     void transferFromDB();
