@@ -4,7 +4,7 @@
 // * Group 11
 // * 
 // * Author(s): Russell Howell 
-// * Last modified: September 6th, 2015
+// * Last modified: September 13th, 2015
 // * Description:
 // * Purpose:
 
@@ -13,7 +13,9 @@
 #include <QFile>
 #include <QDebug> 
 #include <fstream>
-#include <QByteArray>
+#include <vector>
+#include <ctime>
+#include "sha256.h"
 
 
 
@@ -28,11 +30,15 @@ private:
     QString temp_name_; //name of BLOB record
     qint64 size_; //length of the file in bytes
     qint16 number_of_versions_; 
+    int refnumber;
+     std::vector<std::string> block_hashes_;
+     std::vector<int> version_ids_;
+     std::vector<std::string> comments_;
     
-    struct modify_time
+    struct modify_time_
     {
-        //timespec structure
-    };
+        int day, month, year, hour, minute, second;
+    }timespec_;
     
 public:
     FileRec();
