@@ -15,6 +15,7 @@
 #include "mysql_driver.h"
 
 #include <string>
+#include <sstream>
 
 class FileArchiver
 {
@@ -31,8 +32,11 @@ public:
     getVersionInfo(std::string);
     setReference(std::string, in, std::string);
 private:
-    sql::Connection *conn;
-    sql::Driver *driver;
+    sql::Connection *conn_;
+    sql::Driver *driver_;
+    bool invalid_;
+    int increment_;
+
 };
 
 
