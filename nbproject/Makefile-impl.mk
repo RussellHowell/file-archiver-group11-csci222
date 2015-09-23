@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=file-archiver-group11-csci222
+PROJECTNAME=A1FileArchiver
 
 # Active Configuration
 DEFAULTCONF=Debug

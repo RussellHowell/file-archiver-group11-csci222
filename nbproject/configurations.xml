@@ -7,14 +7,28 @@
       <itemPath>FileArchiver.h</itemPath>
       <itemPath>FileRec.h</itemPath>
       <itemPath>MyTableModel.h</itemPath>
-      <itemPath>MyWindow.h</itemPath>
       <itemPath>VersionInfoRecord.h</itemPath>
       <itemPath>VersionRec.h</itemPath>
+      <itemPath>archiver.h</itemPath>
+      <itemPath>fileexplorer.h</itemPath>
+      <itemPath>getcomment.h</itemPath>
+      <itemPath>retriever.h</itemPath>
+      <itemPath>setreference.h</itemPath>
+      <itemPath>ui_archiver.h</itemPath>
+      <itemPath>ui_fileexplorer.h</itemPath>
+      <itemPath>ui_getcomment.h</itemPath>
+      <itemPath>ui_retriever.h</itemPath>
+      <itemPath>ui_setreference.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true">
-      <itemPath>MyWindow.ui</itemPath>
+      <itemPath>Archiver.pro</itemPath>
+      <itemPath>archiver.ui</itemPath>
+      <itemPath>fileexplorer.ui</itemPath>
+      <itemPath>getcomment.ui</itemPath>
+      <itemPath>retriever.ui</itemPath>
+      <itemPath>setreference.ui</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
@@ -22,9 +36,13 @@
       <itemPath>FileArchiver.cpp</itemPath>
       <itemPath>FileRec.cpp</itemPath>
       <itemPath>MyTableModel.cpp</itemPath>
-      <itemPath>MyWindow.cpp</itemPath>
       <itemPath>VersionRec.cpp</itemPath>
+      <itemPath>archiver.cpp</itemPath>
+      <itemPath>fileexplorer.cpp</itemPath>
+      <itemPath>getcomment.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
+      <itemPath>retriever.cpp</itemPath>
+      <itemPath>setreference.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -38,6 +56,9 @@
       <itemPath>Makefile</itemPath>
     </logicalFolder>
   </logicalFolder>
+  <sourceRootList>
+    <Elem>Archiver</Elem>
+  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="Debug" type="4">
@@ -50,7 +71,14 @@
         <modules>core gui widgets</modules>
       </qt>
       <compileType>
+        <linkerTool>
+          <linkerLibItems>
+            <linkerLibFileItem>libs/mysql-connector-c++-1.1.6-linux-ubuntu14.04-x86-64bit/lib/libmysqlcppconn.so</linkerLibFileItem>
+          </linkerLibItems>
+        </linkerTool>
       </compileType>
+      <item path="Archiver.pro" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="FileArchiver.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="FileArchiver.h" ex="false" tool="3" flavor2="0">
@@ -63,19 +91,53 @@
       </item>
       <item path="MyTableModel.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="MyWindow.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MyWindow.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MyWindow.ui" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="VersionInfoRecord.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="VersionRec.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="VersionRec.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="archiver.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="archiver.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="archiver.ui" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="fileexplorer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="fileexplorer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="fileexplorer.ui" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="getcomment.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="getcomment.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="getcomment.ui" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="retriever.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="retriever.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="retriever.ui" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="setreference.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="setreference.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="setreference.ui" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ui_archiver.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ui_fileexplorer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ui_getcomment.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ui_retriever.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ui_setreference.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="4">
@@ -102,6 +164,8 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="Archiver.pro" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="FileArchiver.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="FileArchiver.h" ex="false" tool="3" flavor2="0">
@@ -114,19 +178,53 @@
       </item>
       <item path="MyTableModel.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="MyWindow.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="MyWindow.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="MyWindow.ui" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="VersionInfoRecord.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="VersionRec.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="VersionRec.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="archiver.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="archiver.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="archiver.ui" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="fileexplorer.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="fileexplorer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="fileexplorer.ui" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="getcomment.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="getcomment.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="getcomment.ui" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="retriever.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="retriever.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="retriever.ui" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="setreference.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="setreference.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="setreference.ui" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ui_archiver.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ui_fileexplorer.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ui_getcomment.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ui_retriever.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="ui_setreference.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

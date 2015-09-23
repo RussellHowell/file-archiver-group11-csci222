@@ -7,6 +7,10 @@
 
 #include <QApplication>
 #include "FileRec.h"
+#include "archiver.h"
+#include "getcomment.h"
+#include "retriever.h"
+#include "setreference.h"
 
 
 int main(int argc, char *argv[]) {
@@ -14,6 +18,8 @@ int main(int argc, char *argv[]) {
     // Q_INIT_RESOURCE(resfile);
 
     QApplication app(argc, argv);
+    Archiver w;
+    w.show();
   
     // create and show your widgets here
 
