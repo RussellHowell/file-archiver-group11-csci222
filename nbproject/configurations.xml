@@ -71,11 +71,6 @@
         <modules>core gui widgets</modules>
       </qt>
       <compileType>
-        <linkerTool>
-          <linkerLibItems>
-            <linkerLibFileItem>libs/mysql-connector-c++-1.1.6-linux-ubuntu14.04-x86-64bit/lib/libmysqlcppconn.so</linkerLibFileItem>
-          </linkerLibItems>
-        </linkerTool>
       </compileType>
       <item path="Archiver.pro" ex="false" tool="3" flavor2="0">
       </item>

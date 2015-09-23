@@ -2,7 +2,7 @@
 # Use project properties -> Build -> Qt -> Expert -> Custom Definitions.
 TEMPLATE = app
 DESTDIR = dist/Debug/GNU-Linux-x86
-TARGET = A1FileArchiver
+TARGET = Archiver
 VERSION = 1.0.0
 CONFIG -= debug_and_release app_bundle lib_bundle
 CONFIG += debug 
@@ -21,4 +21,4 @@ QMAKE_CC = gcc
 QMAKE_CXX = g++
 DEFINES += 
 INCLUDEPATH += 
-LIBS += -Wl,-rpath,libs/mysql-connector-c++-1.1.6-linux-ubuntu14.04-x86-64bit/lib libs/mysql-connector-c++-1.1.6-linux-ubuntu14.04-x86-64bit/lib/libmysqlcppconn.so  
+LIBS += 

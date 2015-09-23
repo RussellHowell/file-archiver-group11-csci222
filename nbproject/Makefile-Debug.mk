@@ -52,7 +52,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=libs/mysql-connector-c++-1.1.6-linux-ubuntu14.04-x86-64bit/lib/libmysqlcppconn.so
+LDLIBSOPTIONS=
 
 nbproject/qt-${CND_CONF}.mk: nbproject/qt-${CND_CONF}.pro FORCE
 	${QMAKE} VPATH=. -o qttmp-${CND_CONF}.mk nbproject/qt-${CND_CONF}.pro
@@ -62,7 +62,7 @@ FORCE:
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS} nbproject/qt-${CND_CONF}.mk
-	"${MAKE}" -f nbproject/qt-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/A1FileArchiver
+	"${MAKE}" -f nbproject/qt-${CND_CONF}.mk ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/Archiver
 
 ${CND_BUILDDIR}/Debug/%.o: nbproject/qt-${CND_CONF}.mk
 	${MAKE} -f nbproject/qt-${CND_CONF}.mk "$@"
