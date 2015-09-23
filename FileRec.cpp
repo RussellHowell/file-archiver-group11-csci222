@@ -27,10 +27,10 @@ FileRec::FileRec()
  */
 void FileRec::createData(QString path)
 {
-    QFile mFile(path);
+    QFile m_file(path);
     time_t current_time;
  
-    if(!mFile.open(QFile::ReadOnly))
+    if(!m_file.open(QFile::ReadOnly))
     {
         qDebug()<<"The path or file specified does not exist";
         return;
@@ -48,61 +48,77 @@ void FileRec::createData(QString path)
     timespec_.minute = local_time->tm_min;
     timespec_.second = local_time->tm_sec;
     
-    size_ = mFile.size();
-    file_name_ = mFile.fileName(); //this will currently just assign the entire path to file_name
-     mFile.close();  
-     
-    readBlocks(path.toStdString());
-        
-};
+    size_ = m_file.size();
+    file_name_ = m_file.fileName(); //this will currently just assign the entire path to file_name
+    ref_number_ = 0; 
 
+    readBlocks(m_file);
+    
+    m_file.close();
+};
 
 
 /* readBlocks() opens a filestream, reads 4k blocks one at a time, hashes them,
  * stores hashes in an stl vector 
  * (MOVE HASHES AND BLOCKS TO PERSISTENT MEMORY HERE) */
-void FileRec::readBlocks(string file_name)
+void FileRec::readBlocks(const QFile& m_file)
 {
-    char *buffer = new char[BLOCKSIZE];
-    int iter = 0;
     
-    SHA256 sha256; //hashing object
+    QCryptographicHash blk_crypto(QCryptographicHash::Md5);
+    QCryptographicHash ov_crypto(QCryptographicHash::Md5);
     
-    ifstream file(file_name.c_str(), ios::in | ios::binary | ios::ate);
-   
-    //How many times a *full* block will be read
-    int read_count = size_ / BLOCKSIZE; 
+    QByteArray buffer;
     
-    //This loop will terminate when all full possible blocks have been read 
-    for(int i = 0; i < read_count; i++)
-    {
-        if(file.is_open())
-        {
-            file.seekg(iter, ios::beg);
-            file.readsome(buffer, BLOCKSIZE);
-            iter = iter + BLOCKSIZE; //Iterate through stream 4k at a time;
-            
-             block_hashes_.push_back(sha256(buffer, BLOCKSIZE));
-        }
- 
-        //MOVE BLOCK TO PERSISTENT STOARAGE
+    while(!m_file.atEnd())
+    {   
+        buffer = const_cast<QFile &>(m_file).read(BLOCKSIZE);
+        ov_crypto.addData(buffer); //add to overall hash
+        block_hashes_.push_back(blk_crypto.hash(buffer, 
+                QCryptographicHash::Md5)); //hash current block
     }
     
-    //Calculate how many bytes of a partial block need to be read 
-    read_count = size_ % BLOCKSIZE; 
-    
-    // Final block will more than likely not be exactly 4k bytes 
-    if(read_count != 0)
-    {
-        if(file.is_open())
-        {
-            file.seekg(iter, ios::beg);
-            file.readsome(buffer, read_count); //read read_count bytes into buffer
-         
-             block_hashes_.push_back(sha256(buffer, read_count));
-        }
-        
-    }
-    
-    delete[] buffer; 
+    file_hash_ = ov_crypto.result(); //complete overall hash
 };
+
+QByteArray FileRec::getFileHash()
+{
+    return file_hash_;
+};
+
+
+QString FileRec::getName()
+{
+    return file_name_;
+};
+
+qint64 FileRec::getLength()
+{
+    return size_;
+};
+
+qint16 FileRec::getVersionCount()
+{
+  return number_of_versions_;  
+};
+
+vector<QByteArray> FileRec::getBlockHashes()
+{
+    return block_hashes_;
+};
+
+vector<int> FileRec::getVersions()
+{
+    return version_ids_;
+};
+
+vector<string> FileRec::getComments()
+{
+    return comments_;
+};
+
+int FileRec::getRefNumber()
+{
+    return ref_number_;
+}
+
+//sql::Connection FileRec::operator<<(sql::Connection *conn, FileRec a);

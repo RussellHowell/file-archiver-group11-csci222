@@ -15,7 +15,9 @@
 #include <fstream>
 #include <vector>
 #include <ctime>
-#include "sha256.h"
+#include <QCryptographicHash>
+#include <QString>
+#include <QByteArray>
 
 
 
@@ -25,29 +27,39 @@
 
 class FileRec
 {
+public:
+   FileRec();
+   
+   void createData(QString path);
+   
+   QString getName();
+   QString getModifyTime();
+   qint64 getLength();
+   qint16 getVersionCount();
+   int getRefNumber();
+   QByteArray getFileHash(); 
+   std::vector<QByteArray> getBlockHashes();
+   std::vector<int> getVersions();
+   std::vector<std::string> getComments();
+   
+    
 private:
     QString file_name_;
     QString temp_name_; //name of BLOB record
+    QByteArray file_hash_;
     qint64 size_; //length of the file in bytes
     qint16 number_of_versions_; 
-    int refnumber;
-     std::vector<std::string> block_hashes_;
+    int ref_number_;
+     std::vector<QByteArray> block_hashes_;
      std::vector<int> version_ids_;
      std::vector<std::string> comments_;
+    void readBlocks(const QFile&);
     
     struct modify_time_
     {
         int day, month, year, hour, minute, second;
     }timespec_;
     
-public:
-    FileRec();
-    QString getName();
-    QString getModifyTime();
-    qint64 getLength();
-    qint16 getVersionCount();
-    void createData(QString path);
-    void readBlocks(std::string file_name);
     
 };
 
