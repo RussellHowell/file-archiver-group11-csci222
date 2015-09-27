@@ -70,15 +70,15 @@ bool FileArchiver::exists(std::string file_name)
     }
     int count;
     sql::ResultSet *result = NULL;
-    sql::PreparedStatement exists_tatement = conn_->prepareStatement("SELECT COUNT(*) FROM filerec WHERE filename = ?");
-    exists_statement->setString(1, file_name);
-    result = exists_statement->executeQuery();
+    sql::PreparedStatement prepared_statement = conn_->prepareStatement("SELECT COUNT(*) FROM filerec WHERE filename = ?");
+    prepared_statement->setString(1, file_name);
+    result = prepared_statement->executeQuery();
     if(result->next())
     {
         count = result->getInt();
     }
     delete result;
-    delete exists_statement;
+    delete prepared_statement;
     return count == 1;
 }
 
@@ -101,7 +101,7 @@ bool FileArchiver::differs(std::string file_name)
 }
 
 
-void FileArchiver::insertNew(std::string file_name, std::string comment)
+bool FileArchiver::insertNew(std::string file_name, std::string comment)
 {
     if(invalid_)
     {
@@ -109,20 +109,27 @@ void FileArchiver::insertNew(std::string file_name, std::string comment)
     }
     FileRec temp_file;
     temp_file.createData(file_name);
-    temp_file.addComment(comment);
-    //TODO gzip
-    sql::ResultSet *result = NULL;
-    sql::PreparedStatement prepared_statement = conn_->prepareStatement("INSERT INTO blobtable VALUES(?)");
-    std::ifstream blob_file(/*TODO zipped*/file_name, std::ios::binary);
-    prepared_statement->setBlob(1, &blob_file);
-    result = prepared_statement->execute();
-    blob_file.close();
-    temp_file.setTempName(temp_name_);
-    temp_file.setData(conn_);
-    delete result;
-    delete prepared_statement;
+    if(!this->exists(file_name))
+    {
+        temp_file.addComment(comment);
+        std::string zipped_file = createZipFile(file_name)
+        sql::ResultSet *result = NULL;
+        sql::PreparedStatement prepared_statement = conn_->prepareStatement("INSERT INTO blobtable VALUES(?)");
+        std::ifstream blob_file(zipped_file, std::ios::binary);
+        prepared_statement->setBlob(1, &blob_file);
+        prepared_statement->execute();
+        blob_file.close();
+        prepared_statement = conn_->prepareStatement("SELECT LAST_INSERT_ID()");
+        result = prepared_statement->execute();
+        temp_file.setTempName(result.getInt(.getInt()));
+        temp_file.setData(conn_);
+        delete result;
+        delete prepared_statement;
 
-    //TODO delete gzip file
+        //TODO shell << "rm " << zipped_file;
+        return 0;
+    }
+    return 1;
 }
 
 std::vector<VersionInfo> *getVersionInfo(std::string file_name)
@@ -135,6 +142,7 @@ std::vector<VersionInfo> *getVersionInfo(std::string file_name)
     VersionInfo temp_info;
     temp_file.getData(conn_, file_name);
     std::vector<VersionInfo> *ptr = new std::vector<FileRec>();
+    temp_info.id = temp_file.getRefID();
     temp_info.length = temp_file.getLength();
     temp_info.mtsec = temp_file.getMtsec();
     temp_info.mtnsec = temp_file.getMtnsec();
@@ -147,12 +155,12 @@ std::vector<VersionInfo> *getVersionInfo(std::string file_name)
         sql::PreparedStatement prepared_statement = conn_->prepareStatement("SELECT length, mtsec, mtnsec FROM versionrec WHERE versionid = ?");
         prepared_statement->setString(1, *it);
         result = prepared_statement->execute();
-        //TODO get data from result
         if(result->next())
         {
-            temp_info.length = result.getLong(1)
-            temp_info.mtsec = result.getLong(2)
-            temp_info.mtnsec = result.getLong(3)
+            temp_info.id = *it;
+            temp_info.length = result.getInt(1)
+            temp_info.mtsec = result.getInt(2)
+            temp_info.mtnsec = result.getInt(3)
             ptr->push_back(temp_info);
         }
     }
@@ -167,26 +175,83 @@ void FileArchiver::update(std::string file_name)
     {
         throw (DB_EXCEPTION);
     }
-    FileRec temp_file = this->getDetailsOfLastSaved(file_name);
+    FileRec current_save = this->getDetailsOfLastSaved(file_name);
+    FileRec temp_file;
+    VersionRec temp_version = temp_file.createUpdateData(current_save);//algorithm within filerec VersionRec FileRec::createUpdateData(FileRec old);
+
+    sql::ResultSet *result = NULL;
+    sql::PreparedStatement prepared_statement = conn_->prepareStatement("INSERT INTO filerec VALUES(?, ?, ?, ?, ?, ?)");
+    prepared_statement->setString(1, file_name);
+    prepared_statement->setInt(2, temp_file.getVersions());//not +1 as first version is 0
+    prepared_statement->setInt(3, temp_version.getLength());
+    prepared_statement->setInt(4, temp_version.getMtsec());
+    prepared_statement->setInt(5, temp_version.getMtnsec());
+    prepared_statement->setInt(6, temp_version.getHash());
+    prepared_statement->execute();
+    prepared_statement = conn_->prepareStatement("SELECT LAST_INSERT_ID()");
+    result = prepared_statement->execute();
+    for(std::vector<BlockData>::iterator it1 = temp_version.getBlockData().begin(); it1 != temp_verion.getBlockData().end(); ++it1)
+    {
+        sql::PreparedStatement prepared_statement = conn_->prepareStatement("INSERT INTO blktable VALUES(?, ?, ?, ?, ?)");
+        prepared_statement->setInt(1, result->getInt());
+        prepared_statement->setInt(2, it1->number);
+        prepared_statement->setInt(3, it1->length);
+        prepared_statement->setInt(4, it1->hash);
+        prepared_statement->setBlob(5, it1->data);
+        prepared_statement->execute();
+    }
+    delete result;
+    delete prepared_statement;
 }
 
 
-void FileArchiver::getDetailsOfLastSaved(std::string file_name)
+FileRec FileArchiver::getDetailsOfLastSaved(std::string file_name)
 {
     if(invalid_)
     {
         throw (DB_EXCEPTION);
     }
     FileRec temp_file;
+    VersionRec temp_version;
     temp_file.getData(conn_, file_name);
+    std::vector<int> version_ids = temp_file.getVersions();
+    for(std::vector<int>::iterator it1 = version_ids.begin(); it1 != version_ids.end(); ++it1)
+    {
+        temp_version.getData(conn_, file_name, *it1);
+        for(std::vector<BlockData>::iterator it2 = temp_version.getBlockData().begin(); it2 != temp_verion.getBlockData().end(); ++it2)//not sure if correct, depends on filerec/versionrec
+        {
+            if(it2->number >= temp_file.getLength())//append
+            {
+                temp_file.setLength(temp_file.getLength() + 1);
+                //temp_file.???push_back(it2->hash);
+            }
+            else if(it2->length == 0)//remove
+            {
+                temp_file.setLength(temp_file.getLength() - 1);
+                //remove hashes[it2->number] from temp_version.
+            }
+            else//insert
+            {
+                temp_file.setLength(temp_file.getLength() + 1);
+                //temp_file.???insert(it2->hash, --at position it2->number);
+            }
+        }
+    }
+    return temp_file;
 }
 
-FileRec FileArchiver::retriveVersion(std::string file_name, )
+std::string FileArchiver::retriveVersion(int version_num, std::string file_name, std::string target)
 {
     if(invalid_)
     {
         throw (DB_EXCEPTION);
     }
-
+    return target;
 }
 
+std::string FileArchiver::createZipFile(std::string file_name)
+{
+    //TODO shell << "gzip " << file_name; or zlib
+    file_name += ".gz";
+    return file_name;
+}
