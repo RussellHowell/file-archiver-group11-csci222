@@ -19,9 +19,10 @@
 
 struct VersionInfo
 {
-    long length;
-    long mtsec;
-    long mtnsec;
+    int id;
+    int length;
+    int mtsec;
+    int mtnsec;
 };
 
 class FileArchiver
