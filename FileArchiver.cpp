@@ -3,17 +3,24 @@
 // * CSCI222
 // * Group 11
 // * 
-// * Author(s): Russell Howell
-// * Last modified: September 5th, 2015
+// * Author(s): Jack Robert Humphreys
+// * Last modified: September 28th, 2015
 // * Description: 
 // * Purpose:
 
 #include "FileArchiver.h"
+#include <boost/iostreams/filtering_streambuf.hpp>
+#include <boost/iostreams/copy.hpp>
+#include <boost/iostreams/filter/gzip.hpp>
 
-const char* DB_EXCEPTION = "";
-const char* DB_SERVER = "";
-const char* DB_USERNAME = "";
-const char* DB_PASSWORD = "";
+#include <iostream>
+#include <fstream>
+
+const char* DB_EXCEPTION = "Database Failure! Operation failed. ";
+const char* DB_SERVER = "tcp://127.0.0.1:3306";
+const char* DB_USERNAME = "student26";
+const char* DB_PASSWORD = "XMg5w6gW";
+const char* DB_SCHEMA = "student26";
 
 FileArchiver::FileArchiver()
 {
@@ -21,13 +28,14 @@ FileArchiver::FileArchiver()
     driver_ = get_driver_instance();
     try
     {
-        conn = driver_->connect(DB_SERVER, DB_USERNAME, DB_PASSWORD);
+        
+        conn_ = driver_->connect(DB_SERVER, DB_USERNAME, DB_PASSWORD);
     }
     catch(sql::SQLException &e)
     {
         return;
     }
-    conn_->setSchema("");
+    conn_->setSchema(DB_SCHEMA);
     invalid_ = false;
 }
 
@@ -35,7 +43,7 @@ FileArchiver::~FileArchiver()
 {
     if(!invalid_)
     {
-        dbcon_->close();
+        conn_->close();
         delete conn_;
     }
     invalid_ = true;
@@ -59,7 +67,7 @@ FileArchiver& FileArchiver::operator=(const FileArchiver& right_operand)
 
 bool FileArchiver::good()
 {
-    return (!this->invalid_);
+    return (!invalid_);
 }
 
 bool FileArchiver::exists(std::string file_name)
@@ -109,10 +117,10 @@ bool FileArchiver::insertNew(std::string file_name, std::string comment)
     }
     FileRec temp_file;
     temp_file.createData(file_name);
-    if(!this->exists(file_name))
+    if(!exists(file_name))
     {
         temp_file.addComment(comment);
-        std::string zipped_file = createZipFile(file_name)
+        std::string zipped_file = createZipFile(file_name);
         sql::ResultSet *result = NULL;
         sql::PreparedStatement prepared_statement = conn_->prepareStatement("INSERT INTO blobtable VALUES(?)");
         std::ifstream blob_file(zipped_file, std::ios::binary);
@@ -121,18 +129,18 @@ bool FileArchiver::insertNew(std::string file_name, std::string comment)
         blob_file.close();
         prepared_statement = conn_->prepareStatement("SELECT LAST_INSERT_ID()");
         result = prepared_statement->execute();
-        temp_file.setTempName(result.getInt(.getInt()));
+        temp_file.setTempName(result.getInt(1));
         temp_file.setData(conn_);
         delete result;
         delete prepared_statement;
 
-        //TODO shell << "rm " << zipped_file;
+        std::remove(zipped_file);
         return 0;
     }
     return 1;
 }
 
-std::vector<VersionInfo> *getVersionInfo(std::string file_name)
+std::vector<VersionInfo> *FileArchiver::getVersionInfo(std::string file_name)
 {
     if(invalid_)
     {
@@ -175,7 +183,7 @@ void FileArchiver::update(std::string file_name)
     {
         throw (DB_EXCEPTION);
     }
-    FileRec current_save = this->getDetailsOfLastSaved(file_name);
+    FileRec current_save = getDetailsOfLastSaved(file_name);
     FileRec temp_file;
     VersionRec temp_version = temp_file.createUpdateData(current_save);//algorithm within filerec VersionRec FileRec::createUpdateData(FileRec old);
 
@@ -217,8 +225,8 @@ FileRec FileArchiver::getDetailsOfLastSaved(std::string file_name)
     std::vector<int> version_ids = temp_file.getVersions();
     for(std::vector<int>::iterator it1 = version_ids.begin(); it1 != version_ids.end(); ++it1)
     {
-        temp_version.getData(conn_, file_name, *it1);
-        for(std::vector<BlockData>::iterator it2 = temp_version.getBlockData().begin(); it2 != temp_verion.getBlockData().end(); ++it2)//not sure if correct, depends on filerec/versionrec
+        temp_version.(conn_, file_name, *it1);
+        for(std::vector<BlockData>::iterator it2 = temp_version.getBlockData().begin(); it2 != temp_version.getBlockData().end(); ++it2)//not sure if correct, depends on filerec/versionrec
         {
             if(it2->number >= temp_file.getLength())//append
             {
@@ -240,7 +248,7 @@ FileRec FileArchiver::getDetailsOfLastSaved(std::string file_name)
     return temp_file;
 }
 
-std::string FileArchiver::retriveVersion(int version_num, std::string file_name, std::string target)
+void FileArchiver::retrieveVersion(int version_num, std::string file_name, std::string target)
 {
     if(invalid_)
     {
@@ -251,7 +259,23 @@ std::string FileArchiver::retriveVersion(int version_num, std::string file_name,
 
 std::string FileArchiver::createZipFile(std::string file_name)
 {
-    //TODO shell << "gzip " << file_name; or zlib
-    file_name += ".gz";
-    return file_name;
+    std::ifstream file(file_name, std::ios::in | std::ios::binary);
+    file.seekg(0, file.beg);
+    boost::iostreams::filtering_streambuf<boost::iostreams::input> in;
+    in.push(boost::iostreams::gzip_compressor());
+    in.push(file);
+    boost::iostreams::copy(in, file);
+    return file_name + ".gz;
+}
+
+std::string FileArchiver::unzipFile(std::string file_name)
+{
+    std::ifstream file(file_name, std::ios::in | std::ios::binary);
+    file.seekg(0, file.beg);
+    boost::iostreams::filtering_streambuf<boost::iostreams::input> in;
+    in.push(boost::iostreams::gzip_decompressor());
+    in.push(file);
+    boost::iostreams::copy(in, file);
+    int index = file_name.find_last_of("."); 
+    return file_name.substr(0, lastindex);
 }
