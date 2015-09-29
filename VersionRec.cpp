@@ -17,12 +17,12 @@ VersionRec::VersionRec()
 
 QString VersionRec::getVersionID()
 {
-    return version_ID;
+    return version_id;
 };
 
 void VersionRec::setVersionID(QString id)
 {
-    version_ID = id;
+    version_id = id;
 };
 
 qint16 VersionRec::getVersionNum()
@@ -68,7 +68,7 @@ void VersionRec::setHash(char * in)
 
  // getDiff
 
-std::vector<block_info> VersionRec::getDiff()
+std::vector<BlockInfo> VersionRec::getDiff()
 {
     return blocks;
 };

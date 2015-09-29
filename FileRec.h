@@ -50,7 +50,7 @@ private:
     qint64 size_; //length of the file in bytes
     qint16 number_of_versions_; 
     int ref_number_;
-     std::vector<QByteArray> block_hashes_;
+     std::vector<QByteArray> block_hashes_; // store lengths also
      std::vector<int> version_ids_;
      std::vector<std::string> comments_;
     void readBlocks(const QFile&);

@@ -11,6 +11,8 @@
 #ifndef FILEARCHIVER_H
 #define	FILEARCHIVER_H
 
+#include "FileRec.h"
+#include "VersionRec.h"
 #include "mysql_connection.h"
 #include "mysql_driver.h"
 #include "cppconn/driver.h"
@@ -42,7 +44,7 @@ public:
     bool differs(std::string);
     
     void insertNew(std::string, std::string);
-    void update(std::string, std::string);
+    void update(std::string);
     void retrieveVersion(int, std::string, std::string);
     
     std::string getComment(std::string, int);
@@ -53,7 +55,7 @@ public:
     
 private:
     FileArchiver(const FileArchiver&);
-    FileArchiver operator=(const FileArchiver&);
+    FileArchiver& operator=(const FileArchiver&);
     
     FileRec getDetailsOfLastSaved(std::string);
     
@@ -69,4 +71,3 @@ private:
 
 
 #endif
-

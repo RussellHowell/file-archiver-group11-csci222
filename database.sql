@@ -11,8 +11,8 @@ ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`filerec`( 
 `filename` VARCHAR(255) NOT NULL,
-`curhash` INT(11),
-`ovhash` INT(11),
+`curhash` VARCHAR(45),
+`ovhash` VARCHAR(45),
 `currentversion` INT(11),
 `nversions` INT(11),
 `length` INT(11),
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`versionrec`(
 `length` INT(11),
 `mtsec` INT(11),
 `mtnsec` INT(11),
-`ovhash` INT(11),
+`ovhash` VARCHAR(45),
 PRIMARY KEY(`idversion`),
 INDEX `fk_versionrec` (`fileref` ASC),
 CONSTRAINT `fk_versionrec`
@@ -61,7 +61,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `mydb`.`fileblkhashes`(
 `fileref` VARCHAR(255) NOT NULL,
 `blknum` INT(11) NOT NULL,
-`hashval` INT(11),
+`hashval` VARCHAR(45),
 PRIMARY KEY(`fileref`, `blknum`),
 INDEX `fk_fileblkhashes` (`fileref` ASC),
 CONSTRAINT `fk_fileblkhashes`
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `mydb`.`blktable`(
 `version` INT(11) NOT NULL,
 `blknum` INT(11) NOT NULL,
 `length` INT(11),
-`hash` INT(11),
+`hash` VARCHAR(45),
 `data` MEDIUMBLOB,
 PRIMARY KEY(`version`, `blknum`),
 INDEX `fk_blktable` (`version` ASC),

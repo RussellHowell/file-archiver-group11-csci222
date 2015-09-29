@@ -22,48 +22,37 @@
         //timespec structure to hold the data last modified, could be a string
  };
  
-struct block_info
+struct BlockInfo
 {
-    qint64 block_num;
+    int number;
     char * hash;
-    qint64 block_length;
+    int length;
     // byte array (compressed data for the file block)
-    unsigned char * byte_array;
-    
-    
-    block_info() //struct constructor
-    {
-        byte_array = new unsigned char[4000];
-    }
-    
-    ~block_info() //struct destructor
-    {
-        delete byte_array;
-    }
+    unsigned char data[4000];
 };
 
 class VersionRec
 {
     
 private:
-    QString version_ID; //generated primary key or "GENOID" in notes
-    qint16 version_num;
-    qint64 length; //number of elements in record_collections
-    timestruc modify_time;
+    QString version_id_; //generated primary key or "GENOID" in notes
+    int version_num_;
+    int length_; //number of elements in record_collections
+    int mtsec_;
   
     char * hash;
     // hash member
     
-    std::vector<block_info> blocks; 
+    std::vector<BlockInfo> blocks; 
     //collection of blocks different in this version
     
 public:
     VersionRec();
-    QString getVersionID();
+    std::string getVersionID();
     void setVersionID(QString);
-    qint16 getVersionNum();
+    int getVersionNum();
     void setVersionNum(qint16);
-    qint64 getLength();
+    int getLength();
     void setLength(qint64);
     
     timestruc getModifyTime();
