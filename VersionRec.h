@@ -7,67 +7,57 @@
 // * Last modified: September 9th, 2015
 // * Description:
 // * Purpose:
-#include <QtCore/QCoreApplication>
-#include <QApplication>
-#include <QFile>
-#include <QDebug> 
-
-#include <vector>
 
 #ifndef VERSIONREC_H
 #define	VERSIONREC_H
 
- struct timestruc
- {
-        //timespec structure to hold the data last modified, could be a string
- };
+#include "mysql_connection.h"
+#include <QtCore/QCoreApplication>
+#include <QByteArray>
+#include <vector>
+
  
-struct BlockInfo
+struct BlkTable
 {
-    int number;
-    char * hash;
+    int blknum;
     int length;
-    // byte array (compressed data for the file block)
-    unsigned char data[4000];
+    std::string hash;
+    QByteArray data;
 };
 
 class VersionRec
 {
-    
-private:
-    QString version_id_; //generated primary key or "GENOID" in notes
-    int version_num_;
-    int length_; //number of elements in record_collections
-    int mtsec_;
-  
-    char * hash;
-    // hash member
-    
-    std::vector<BlockInfo> blocks; 
-    //collection of blocks different in this version
-    
 public:
     VersionRec();
-    std::string getVersionID();
-    void setVersionID(QString);
-    int getVersionNum();
-    void setVersionNum(qint16);
+    
+    int getIdversionrec();
+    void setIdversionrec(int);
+    std::string getFileref();
+    void setFileref(std::string);
+    int getVersionnum();
+    void setVersionnum(int);
     int getLength();
-    void setLength(qint64);
+    void setLength(int);
+    int getMtsec();
+    void setMtsec(int);
+    int getMtnsec();
+    void setMtnsec(int);
+    std::string getOvhash();
+    void setOvhash(std::string);
+    std::vector<BlkTable> getBlktable();
+    void setBlktable(std::vector<BlkTable>);
     
-    timestruc getModifyTime();
-    void setModifyTime(timestruc);
-    
-    char * getHash();
-    void setHash(char *);
-    
-    std::vector<block_info> getDiff();
-    void setDiff(qint64, char*, qint64, unsigned char*); //add one block at a time, creates block_info structure within
-    
-    void transferToDB();
-    void transferFromDB();
+    void getData(sql::Connection&, int);
+    void setData(sql::Connection&);
+private:
+    int idversionrec_;
+    std::string fileref_;
+    int versionnum_;
+    int length_;
+    int mtsec_;
+    int mtnsec_;
+    std::string ovhash_;
+    std::vector<BlkTable> blktable_;
 };
 
-
-#endif	/* VERSIONREC_H */
-
+#endif
