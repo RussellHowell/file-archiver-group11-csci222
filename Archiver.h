@@ -58,6 +58,8 @@ private slots:
 private:
     Ui::Archiver *ui;
     QStandardItemModel * model;
+    QString fileName;
+    int version_number;
 
 
 

@@ -5,6 +5,9 @@
  * Main file
  */
 
+
+#include <QtGui>
+#include <QtCore>
 #include "Archiver.h"
 #include "GetComment.h"
 #include "Retriever.h"

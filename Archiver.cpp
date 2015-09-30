@@ -5,20 +5,27 @@
  * Program main window file
  */
 
+
+#include <QtGui>
+#include <QtCore>
 #include "Archiver.h"
 //#include "FileArchiver.h"
 #include "ui_Archiver.h"
 #include <QStandardItemModel>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <time.h>
+//#include <boost/date_time/posix_time/posix_time.hpp>
+//#include <boost/date_time/gregorian/gregorian_types.hpp>
 
 QVector<item> vector(3);
-
 
 Archiver::Archiver(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Archiver)
 {
+    version_number = -1;
+
     ui->setupUi(this);
     //set name of window
     this->setWindowTitle("MyWindow");
@@ -26,7 +33,7 @@ Archiver::Archiver(QWidget *parent) :
 
     //Create the version viewer table view
 
-    model = new QStandardItemModel(3,3,this);
+    model = new QStandardItemModel(0,3,this);
     //set 3 columns header and resize to fit
     model-> setHorizontalHeaderItem(0, new QStandardItem(QString("Version #")));
     model-> setHorizontalHeaderItem(1, new QStandardItem(QString("Date")));
@@ -39,18 +46,23 @@ Archiver::Archiver(QWidget *parent) :
     ui->fileviewer->setHorizontalHeader(header);
 
     //===============================================================================
-    //                          TESTING VECTOR INTO TABLEVIEW
+    //      TESTING VECTOR INTO TABLEVIEW (REMOVE WHEN TESTING WITH ACTUAL DATA)
 
     this->populate();
 
+    for(int i=0; i <3 ; i++)
+    {
+        QStandardItem *first1 = new QStandardItem(QString(vector[i].version));
+        QStandardItem *first2 = new QStandardItem(QString(vector[i].time));
+        QStandardItem *first3 = new QStandardItem(QString(vector[i].size));
 
-    QStandardItem *first1 = new QStandardItem(QString(vector[0].version));
-    QStandardItem *first2 = new QStandardItem(QString(vector[0].time));
-    QStandardItem *first3 = new QStandardItem(QString(vector[0].size));
+        model->setItem(i,0,first1);
+        model->setItem(i,1,first2);
+        model->setItem(i,2,first3);
+    }
 
-    model->setItem(0,0,first1);
-    model->setItem(0,1,first2);
-    model->setItem(0,2,first3);
+
+
     //===============================================================================
 
 
@@ -68,7 +80,7 @@ Archiver::~Archiver()
 void Archiver::on_file_button_clicked()
 {
     //get the path of file
-    QString fileName = QFileDialog::getOpenFileName(this,tr("Open File"), "/home");
+    fileName = QFileDialog::getOpenFileName(this,tr("Open File"), "/home");
 
     ui->fileEdit->setText(fileName);
 
@@ -90,14 +102,14 @@ void Archiver::on_file_button_clicked()
 
 }
 
+//choose saving of file
 void Archiver::on_save_button_clicked()
 {
-    //assigned as false for testing purpose
-    //will check based on differ()
-    bool saved = true;
 
-    //if(FileArchiver::differs(fileName))
-    if(saved)
+    bool saved = true;  // <------ to be removed once differ() works
+
+    //if(FileArchiver::differs(fileName))  <------- uncomment this once done
+    if(saved)  // <------ to be removed once differ() works
     {
         GetComment * comBox = new GetComment;
 
@@ -119,19 +131,35 @@ void Archiver::on_save_button_clicked()
     }
 }
 
+//retrieve function
 void Archiver::on_retrieve_button_clicked()
 {
+
+    //create retriever instance
     retriever retbox;
 
     retbox.setModal(true);
     retbox.exec();
+
+    //get the retrieved file name and directory chosen from retriever instance
+    QString retname = retbox.get_name();
+    QString directory = retbox.get_directory();
+
+    //validation if a row is chosen
+    if(version_number>=0)
+    {
+        //FileArchiver::retrieveVersion(version_number,fileName,retname);
+    }
+
 }
 
 void Archiver::on_reference_button_clicked()
 {
+    //Prompt QMessageBox for reference setting
     QMessageBox::StandardButton reply;
     reply = QMessageBox::question(this,"Set reference","Set reference version",QMessageBox::Cancel | QMessageBox::Ok);
 
+    //Carry out the reference setting if OK is chosen
     if(reply==QMessageBox::Ok)
     {
         GetComment * addComment = new GetComment;
@@ -140,32 +168,50 @@ void Archiver::on_reference_button_clicked()
 
         QString comment = addComment->return_comment();
 
-        //FileArchiver::setReference(fileName,version_number,comment);
-        //this->retrieveVersionDataForFile();
+        //validation if there is a chosen version
+        if(version_number>=0)
+        {
+            //FileArchiver::setReference(fileName,version_number,comment);
+            //this->retrieveVersionDataForFile();
+        }
+
         
     }
 
 }
 
+//display comment
 void Archiver::on_comment_button_clicked()
 {
 
     QString display;
-    //display = QString::fromStdString(FileArchiver::getComment(fileName,version_number));
+    //if there is a chosen row (default value for non-chosen is -1)
+    if(version_number>=0)
+    {
+        //display = QString::fromStdString(FileArchiver::getComment(fileName,version_number));
+    }
+
+    //prompt message box showing the comment
     QMessageBox::information(this,"Comment",display, QMessageBox::Ok);
 
 }
 
+//get the version_number based on clicked row's index
 void Archiver::on_fileviewer_activated(const QModelIndex &index)
 {
-    QString chosen = ui->fileviewer->model()->data(index).toString();
+
+    //std::vector<VersionInfo> x;
+    //x = FileArchiver::getVersionInfo(fileName);
+    //version_number = x[index.row()].id;
+
+
 }
 
 
+
+//random vector populate for testing (REMOVE WHEN PROJECT DONE)
 void Archiver::populate()
 {
-
-    //item array[3];
 
     vector[0].time = "12.00pm";
     vector[0].version = "1";
@@ -178,42 +224,86 @@ void Archiver::populate()
     vector[2].time = "10.00pm";
     vector[2].version = "3";
     vector[2].size = "99";
-
-
 }
 
 
+//get the versions and populate data based on vector from FileArchiver
 void Archiver::retrieveVersionDataForFile()
 {
     model->clear();
 
-    //FileArchiver::getVersionInfo(filename);
+    //std::vector<VersionInfo> x;
+    //x = FileArchiver::getVersionInfo(filename);
 
-    model = new QStandardItemModel(2,3,this);
+    //set the table view
+    model = new QStandardItemModel(0,3,this);
+
     //set 3 columns header and resize to fit
     model-> setHorizontalHeaderItem(0, new QStandardItem(QString("Version #")));
     model-> setHorizontalHeaderItem(1, new QStandardItem(QString("Date")));
     model-> setHorizontalHeaderItem(2, new QStandardItem(QString("Size")));
 
+    //set columns to fit table
     ui->fileviewer->resizeColumnsToContents();
 
     QHeaderView* header = ui->fileviewer->horizontalHeader();
     header->setStretchLastSection(true);
     ui->fileviewer->setHorizontalHeader(header);
 
+    //============================================================
+    // RANDOM TEST DATA (REMOVE THIS!)
+    for(int i=0; i <2 ; i++)
+    {
+        QStandardItem *first1 = new QStandardItem(QString(vector[i].version));
+        QStandardItem *first2 = new QStandardItem(QString(vector[i].time));
+        QStandardItem *first3 = new QStandardItem(QString(vector[i].size));
+
+        model->setItem(i,0,first1);
+        model->setItem(i,1,first2);
+        model->setItem(i,2,first3);
+    }
+    //============================================================
+
+    /*
+    for(std::vector<VersionInfo>::iterator it = x.begin(); it != x.end(); ++it)
+    {
+        QStandardItem *first1 = new QStandardItem(QString(*it.id));
+
+        int seconds = *it.mtsec;
+        int nano = *it.mtnsec;
+
+        boost::posix_time::ptime m_DateTime = ptime(date(1970, 1, 1), time_duration(0,0,0, time_duration::ticks_per_second()
+                                                    * (time_duration::fractional_seconds_type)_seconds));
+
+
+        //convert the time here
+        std::string time = to_simple_string(m_DateTime);
+
+        QStandardItem *first2 = new QStandardItem(QString(time));
+        QStandardItem *first3 = new QStandardItem(QString(*it.length));
+
+        model->setItem(i,0,first1);
+        model->setItem(i,1,first2);
+        model->setItem(i,2,first3);
+    }
+    */
+
     ui->fileviewer->setModel(model);
 }
 
+//create a new version
 void Archiver::createFirstVersion()
 {
 
+    //prompt a GetComment form to attain the comment for the new version
     GetComment * addComment = new GetComment;
     addComment->setModal(true);
     addComment->exec();
 
+    //get comment
     QString comment = addComment->return_comment();
 
-    //FileArchiver::insertNew()
+    //FileArchiver::insertNew(fileName,comment)
     this->retrieveVersionDataForFile();
 }
 

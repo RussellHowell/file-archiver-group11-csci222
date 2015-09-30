@@ -5,6 +5,9 @@
  * Comment box file
  */
 
+
+#include <QtGui>
+#include <QtCore>
 #include "GetComment.h"
 #include "ui_GetComment.h"
 
@@ -22,6 +25,7 @@ GetComment::~GetComment()
     delete ui;
 }
 
+//get comment from input
 void GetComment::on_buttonBox_accepted()
 {
 
@@ -29,6 +33,7 @@ void GetComment::on_buttonBox_accepted()
 
 }
 
+//return comment
 QString GetComment::return_comment()
 {
     return commentin;

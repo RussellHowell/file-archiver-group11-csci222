@@ -22,6 +22,8 @@ class retriever : public QDialog
 public:
     explicit retriever(QWidget *parent = 0);
     ~retriever();
+    QString get_name();
+    QString get_directory();
 
 private slots:
     void on_selectfile_clicked();
@@ -30,8 +32,13 @@ private slots:
 
     void on_OK_retrieve_clicked();
 
+
+
 private:
     Ui::retriever *ui;
+    QString retname;
+    QString retrieveddir;
+
 };
 
 #endif // RETRIEVER_H

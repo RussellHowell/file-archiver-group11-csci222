@@ -5,6 +5,9 @@
  * Version retrieve file
  */
 
+
+#include <QtGui>
+#include <QtCore>
 #include "Retriever.h"
 #include "ui_Retriever.h"
 
@@ -24,15 +27,12 @@ retriever::~retriever()
 void retriever::on_selectfile_clicked()
 {
     //get the path of file
-    QString retrieveddir =  QFileDialog::getExistingDirectory(this, tr("Open Directory"), "/home",QFileDialog::ShowDirsOnly| QFileDialog::DontResolveSymlinks);
+    retrieveddir =  QFileDialog::getExistingDirectory(this, tr("Open Directory"), "/home",QFileDialog::ShowDirsOnly| QFileDialog::DontResolveSymlinks);
 
     ui->directoryedit->setText(retrieveddir);
 
     //Get name of file
-    QString name = ui->nameedit->text();
-
-    //FileArchiver::retrieveVersion(version_number,fileName,retrievedName);
-
+    retname = ui->nameedit->text();
 
 }
 
@@ -44,7 +44,18 @@ void retriever::on_cancel_clicked()
 
 void retriever::on_OK_retrieve_clicked()
 {
-    QString name = ui->nameedit->text();
-
     this->accept();
+}
+
+//return the retrieved name
+QString retriever::get_name()
+{
+    return retname;
+}
+
+//return the retrieved directory
+QString retriever::get_directory()
+{
+    return retrieveddir;
+
 }
