@@ -12,21 +12,18 @@ TARGET = Archiver
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
-        archiver.cpp \
-    getcomment.cpp \
-    retriever.cpp \
-    setreference.cpp \
-    fileexplorer.cpp
+SOURCES +=\
+    Archiver.cpp \
+    GetComment.cpp \
+    Main.cpp \
+    Retriever.cpp
 
-HEADERS  += archiver.h \
-    getcomment.h \
-    retriever.h \
-    setreference.h \
-    fileexplorer.h
+HEADERS  += \
+    GetComment.h \
+    Retriever.h \
+    Archiver.h
 
-FORMS    += archiver.ui \
-    getcomment.ui \
-    retriever.ui \
-    setreference.ui \
-    fileexplorer.ui
+FORMS    += \
+    Archiver.ui \
+    GetComment.ui \
+    Retriever.ui

@@ -5,8 +5,8 @@
  * Comment box file
  */
 
-#include "getcomment.h"
-#include "ui_getcomment.h"
+#include "GetComment.h"
+#include "ui_GetComment.h"
 
 GetComment::GetComment(QWidget *parent) :
     QDialog(parent),
@@ -14,9 +14,23 @@ GetComment::GetComment(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setWindowTitle("GetCommentForm");
+
 }
 
 GetComment::~GetComment()
 {
     delete ui;
 }
+
+void GetComment::on_buttonBox_accepted()
+{
+
+    commentin = ui->textEdit->toPlainText();
+
+}
+
+QString GetComment::return_comment()
+{
+    return commentin;
+}
+

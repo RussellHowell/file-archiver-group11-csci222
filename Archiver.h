@@ -9,10 +9,19 @@
 #define ARCHIVER_H
 
 #include <QMainWindow>
-#include "getcomment.h"
-#include "retriever.h"
-#include "setreference.h"
-#include "fileexplorer.h"
+#include "GetComment.h"
+#include "Retriever.h"
+#include <QMessageBox>
+#include <QStandardItemModel>
+
+struct item
+{
+    QString version;
+    QString time;
+    QString size;
+};
+
+
 
 namespace Ui {
 class Archiver;
@@ -38,8 +47,23 @@ private slots:
 
     void on_comment_button_clicked();
 
+    void on_fileviewer_activated(const QModelIndex &index);
+
+    void populate();
+
+    void retrieveVersionDataForFile();
+
+    void createFirstVersion();
+
 private:
     Ui::Archiver *ui;
+    QStandardItemModel * model;
+
+
+
 };
+
+
+
 
 #endif // ARCHIVER_H

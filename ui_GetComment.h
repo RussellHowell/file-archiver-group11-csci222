@@ -1,7 +1,7 @@
 /********************************************************************************
-** Form generated from reading UI file 'getcomment.ui'
+** Form generated from reading UI file 'GetComment.ui'
 **
-** Created by: Qt User Interface Compiler version 4.8.6
+** Created by: Qt User Interface Compiler version 5.2.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,14 +10,14 @@
 #define UI_GETCOMMENT_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QDialog>
-#include <QtGui/QDialogButtonBox>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLabel>
-#include <QtGui/QTextEdit>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QDialog>
+#include <QtWidgets/QDialogButtonBox>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QTextEdit>
 
 QT_BEGIN_NAMESPACE
 
@@ -31,22 +31,22 @@ public:
     void setupUi(QDialog *GetComment)
     {
         if (GetComment->objectName().isEmpty())
-            GetComment->setObjectName(QString::fromUtf8("GetComment"));
-        GetComment->resize(400, 300);
+            GetComment->setObjectName(QStringLiteral("GetComment"));
+        GetComment->resize(392, 297);
         buttonBox = new QDialogButtonBox(GetComment);
-        buttonBox->setObjectName(QString::fromUtf8("buttonBox"));
+        buttonBox->setObjectName(QStringLiteral("buttonBox"));
         buttonBox->setGeometry(QRect(30, 250, 341, 32));
         buttonBox->setOrientation(Qt::Horizontal);
         buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
         label = new QLabel(GetComment);
-        label->setObjectName(QString::fromUtf8("label"));
+        label->setObjectName(QStringLiteral("label"));
         label->setGeometry(QRect(20, 20, 311, 21));
         QFont font;
-        font.setFamily(QString::fromUtf8("MS Reference Sans Serif"));
+        font.setFamily(QStringLiteral("MS Reference Sans Serif"));
         font.setPointSize(11);
         label->setFont(font);
         textEdit = new QTextEdit(GetComment);
-        textEdit->setObjectName(QString::fromUtf8("textEdit"));
+        textEdit->setObjectName(QStringLiteral("textEdit"));
         textEdit->setGeometry(QRect(20, 50, 321, 171));
 
         retranslateUi(GetComment);
@@ -58,8 +58,8 @@ public:
 
     void retranslateUi(QDialog *GetComment)
     {
-        GetComment->setWindowTitle(QApplication::translate("GetComment", "Dialog", 0, QApplication::UnicodeUTF8));
-        label->setText(QApplication::translate("GetComment", "Comment to go with version of file:", 0, QApplication::UnicodeUTF8));
+        GetComment->setWindowTitle(QApplication::translate("GetComment", "Dialog", 0));
+        label->setText(QApplication::translate("GetComment", "Comment to go with version of file:", 0));
     } // retranslateUi
 
 };

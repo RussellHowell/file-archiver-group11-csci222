@@ -1,7 +1,7 @@
 /********************************************************************************
-** Form generated from reading UI file 'archiver.ui'
+** Form generated from reading UI file 'Archiver.ui'
 **
-** Created by: Qt User Interface Compiler version 4.8.6
+** Created by: Qt User Interface Compiler version 5.2.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,21 +10,21 @@
 #define UI_ARCHIVER_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QAction>
-#include <QtGui/QApplication>
-#include <QtGui/QButtonGroup>
-#include <QtGui/QColumnView>
-#include <QtGui/QGridLayout>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QHeaderView>
-#include <QtGui/QLabel>
-#include <QtGui/QLineEdit>
-#include <QtGui/QMainWindow>
-#include <QtGui/QMenuBar>
-#include <QtGui/QPushButton>
-#include <QtGui/QStatusBar>
-#include <QtGui/QToolBar>
-#include <QtGui/QWidget>
+#include <QtWidgets/QAction>
+#include <QtWidgets/QApplication>
+#include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QGridLayout>
+#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QStatusBar>
+#include <QtWidgets/QTableView>
+#include <QtWidgets/QToolBar>
+#include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
 
@@ -33,18 +33,18 @@ class Ui_Archiver
 public:
     QWidget *centralWidget;
     QLabel *label_2;
-    QColumnView *versionView;
-    QWidget *widget;
+    QWidget *layoutWidget;
     QHBoxLayout *horizontalLayout;
     QLabel *label;
-    QLineEdit *lineEdit;
+    QLineEdit *fileEdit;
     QPushButton *file_button;
-    QWidget *widget1;
+    QWidget *layoutWidget1;
     QGridLayout *gridLayout;
     QPushButton *save_button;
     QPushButton *retrieve_button;
     QPushButton *reference_button;
     QPushButton *comment_button;
+    QTableView *fileviewer;
     QMenuBar *menuBar;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
@@ -52,38 +52,31 @@ public:
     void setupUi(QMainWindow *Archiver)
     {
         if (Archiver->objectName().isEmpty())
-            Archiver->setObjectName(QString::fromUtf8("Archiver"));
+            Archiver->setObjectName(QStringLiteral("Archiver"));
         Archiver->resize(696, 404);
         centralWidget = new QWidget(Archiver);
-        centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
+        centralWidget->setObjectName(QStringLiteral("centralWidget"));
         label_2 = new QLabel(centralWidget);
-        label_2->setObjectName(QString::fromUtf8("label_2"));
+        label_2->setObjectName(QStringLiteral("label_2"));
         label_2->setGeometry(QRect(20, 60, 141, 21));
         QFont font;
-        font.setFamily(QString::fromUtf8("MS Sans Serif"));
+        font.setFamily(QStringLiteral("MS Sans Serif"));
         font.setPointSize(14);
         font.setBold(true);
         font.setWeight(75);
         label_2->setFont(font);
-        versionView = new QColumnView(centralWidget);
-        versionView->setObjectName(QString::fromUtf8("versionView"));
-        versionView->setGeometry(QRect(20, 110, 441, 192));
-        versionView->setFrameShape(QFrame::StyledPanel);
-        versionView->setFrameShadow(QFrame::Plain);
-        versionView->setLineWidth(4);
-        versionView->setMidLineWidth(2);
-        widget = new QWidget(centralWidget);
-        widget->setObjectName(QString::fromUtf8("widget"));
-        widget->setGeometry(QRect(20, 10, 651, 25));
-        horizontalLayout = new QHBoxLayout(widget);
+        layoutWidget = new QWidget(centralWidget);
+        layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
+        layoutWidget->setGeometry(QRect(20, 10, 651, 29));
+        horizontalLayout = new QHBoxLayout(layoutWidget);
         horizontalLayout->setSpacing(6);
         horizontalLayout->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         horizontalLayout->setContentsMargins(0, 0, 0, 0);
-        label = new QLabel(widget);
-        label->setObjectName(QString::fromUtf8("label"));
+        label = new QLabel(layoutWidget);
+        label->setObjectName(QStringLiteral("label"));
         QFont font1;
-        font1.setFamily(QString::fromUtf8("MS Sans Serif"));
+        font1.setFamily(QStringLiteral("MS Sans Serif"));
         font1.setPointSize(11);
         font1.setBold(true);
         font1.setWeight(75);
@@ -91,41 +84,41 @@ public:
 
         horizontalLayout->addWidget(label);
 
-        lineEdit = new QLineEdit(widget);
-        lineEdit->setObjectName(QString::fromUtf8("lineEdit"));
+        fileEdit = new QLineEdit(layoutWidget);
+        fileEdit->setObjectName(QStringLiteral("fileEdit"));
 
-        horizontalLayout->addWidget(lineEdit);
+        horizontalLayout->addWidget(fileEdit);
 
-        file_button = new QPushButton(widget);
-        file_button->setObjectName(QString::fromUtf8("file_button"));
+        file_button = new QPushButton(layoutWidget);
+        file_button->setObjectName(QStringLiteral("file_button"));
 
         horizontalLayout->addWidget(file_button);
 
-        widget1 = new QWidget(centralWidget);
-        widget1->setObjectName(QString::fromUtf8("widget1"));
-        widget1->setGeometry(QRect(500, 110, 161, 191));
-        gridLayout = new QGridLayout(widget1);
+        layoutWidget1 = new QWidget(centralWidget);
+        layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
+        layoutWidget1->setGeometry(QRect(500, 110, 161, 191));
+        gridLayout = new QGridLayout(layoutWidget1);
         gridLayout->setSpacing(6);
         gridLayout->setContentsMargins(11, 11, 11, 11);
-        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+        gridLayout->setObjectName(QStringLiteral("gridLayout"));
         gridLayout->setContentsMargins(0, 0, 0, 0);
-        save_button = new QPushButton(widget1);
-        save_button->setObjectName(QString::fromUtf8("save_button"));
+        save_button = new QPushButton(layoutWidget1);
+        save_button->setObjectName(QStringLiteral("save_button"));
 
         gridLayout->addWidget(save_button, 0, 0, 1, 1);
 
-        retrieve_button = new QPushButton(widget1);
-        retrieve_button->setObjectName(QString::fromUtf8("retrieve_button"));
+        retrieve_button = new QPushButton(layoutWidget1);
+        retrieve_button->setObjectName(QStringLiteral("retrieve_button"));
 
         gridLayout->addWidget(retrieve_button, 1, 0, 1, 1);
 
-        reference_button = new QPushButton(widget1);
-        reference_button->setObjectName(QString::fromUtf8("reference_button"));
+        reference_button = new QPushButton(layoutWidget1);
+        reference_button->setObjectName(QStringLiteral("reference_button"));
 
         gridLayout->addWidget(reference_button, 2, 0, 1, 1);
 
-        comment_button = new QPushButton(widget1);
-        comment_button->setObjectName(QString::fromUtf8("comment_button"));
+        comment_button = new QPushButton(layoutWidget1);
+        comment_button->setObjectName(QStringLiteral("comment_button"));
         QPalette palette;
         QBrush brush(QColor(0, 0, 0, 255));
         brush.setStyle(Qt::SolidPattern);
@@ -194,16 +187,19 @@ public:
 
         gridLayout->addWidget(comment_button, 3, 0, 1, 1);
 
+        fileviewer = new QTableView(centralWidget);
+        fileviewer->setObjectName(QStringLiteral("fileviewer"));
+        fileviewer->setGeometry(QRect(20, 110, 461, 191));
         Archiver->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(Archiver);
-        menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 696, 21));
+        menuBar->setObjectName(QStringLiteral("menuBar"));
+        menuBar->setGeometry(QRect(0, 0, 696, 25));
         Archiver->setMenuBar(menuBar);
         mainToolBar = new QToolBar(Archiver);
-        mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
+        mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
         Archiver->addToolBar(Qt::TopToolBarArea, mainToolBar);
         statusBar = new QStatusBar(Archiver);
-        statusBar->setObjectName(QString::fromUtf8("statusBar"));
+        statusBar->setObjectName(QStringLiteral("statusBar"));
         Archiver->setStatusBar(statusBar);
 
         retranslateUi(Archiver);
@@ -213,14 +209,14 @@ public:
 
     void retranslateUi(QMainWindow *Archiver)
     {
-        Archiver->setWindowTitle(QApplication::translate("Archiver", "Archiver", 0, QApplication::UnicodeUTF8));
-        label_2->setText(QApplication::translate("Archiver", "Version Data", 0, QApplication::UnicodeUTF8));
-        label->setText(QApplication::translate("Archiver", "File", 0, QApplication::UnicodeUTF8));
-        file_button->setText(QApplication::translate("Archiver", "Select File", 0, QApplication::UnicodeUTF8));
-        save_button->setText(QApplication::translate("Archiver", "Save Current", 0, QApplication::UnicodeUTF8));
-        retrieve_button->setText(QApplication::translate("Archiver", "Retrieve Version", 0, QApplication::UnicodeUTF8));
-        reference_button->setText(QApplication::translate("Archiver", "Set as reference", 0, QApplication::UnicodeUTF8));
-        comment_button->setText(QApplication::translate("Archiver", "Show Comment", 0, QApplication::UnicodeUTF8));
+        Archiver->setWindowTitle(QApplication::translate("Archiver", "Archiver", 0));
+        label_2->setText(QApplication::translate("Archiver", "Version Data", 0));
+        label->setText(QApplication::translate("Archiver", "File", 0));
+        file_button->setText(QApplication::translate("Archiver", "Select File", 0));
+        save_button->setText(QApplication::translate("Archiver", "Save Current", 0));
+        retrieve_button->setText(QApplication::translate("Archiver", "Retrieve Version", 0));
+        reference_button->setText(QApplication::translate("Archiver", "Set as reference", 0));
+        comment_button->setText(QApplication::translate("Archiver", "Show Comment", 0));
     } // retranslateUi
 
 };

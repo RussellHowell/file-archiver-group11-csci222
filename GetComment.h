@@ -20,10 +20,15 @@ class GetComment : public QDialog
 
 public:
     explicit GetComment(QWidget *parent = 0);
+    QString return_comment();
     ~GetComment();
+
+private slots:
+    void on_buttonBox_accepted();
 
 private:
     Ui::GetComment *ui;
+    QString commentin;
 };
 
 #endif // GETCOMMENT_H
