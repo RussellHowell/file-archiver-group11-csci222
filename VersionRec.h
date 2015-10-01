@@ -3,19 +3,21 @@
 // * CSCI222
 // * Group 11
 // * 
-// * Author(s): Danielle Cerisier 
-// * Last modified: September 9th, 2015
-// * Description:
+// * Author(s): Jack Robert Humphreys
+// * Last modified: September 28th, 2015
+// * Description: 
 // * Purpose:
 
 #ifndef VERSIONREC_H
 #define	VERSIONREC_H
 
 #include "mysql_connection.h"
-#include <QtCore/QCoreApplication>
+#include "cppconn/connection.h"
+//#include <QtCore/QCoreApplication>
 #include <QByteArray>
 #include <vector>
-
+#include <string>
+#include <cstdlib>
  
 struct BlkTable
 {
@@ -47,8 +49,8 @@ public:
     std::vector<BlkTable> getBlktable();
     void setBlktable(std::vector<BlkTable>);
     
-    void getData(sql::Connection&, int);
-    void setData(sql::Connection&);
+    void getData(sql::Connection*, int);
+    void setData(sql::Connection*);
 private:
     int idversionrec_;
     std::string fileref_;

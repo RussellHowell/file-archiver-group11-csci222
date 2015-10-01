@@ -3,13 +3,14 @@
 // * CSCI222
 // * Group 11
 // * 
-// * Author(s): Danielle Cerisier 
-// * Last modified: September 9th, 2015
-// * Description:
+// * Author(s): Jack Robert Humphreys
+// * Last modified: September 28th, 2015
+// * Description: 
 // * Purpose:
 
 #include "VersionRec.h"
 #include "cppconn/prepared_statement.h"
+#include <cppconn/resultset.h>
 
 VersionRec::VersionRec()
 {
@@ -96,10 +97,10 @@ void VersionRec::setBlktable(std::vector<BlkTable> blktable)
     blktable_ = blktable;
 }
 
-void VersionRec::getData(sql::Connection& conn, int idversionrec)
+void VersionRec::getData(sql::Connection* conn, int idversionrec)
 {
     sql::ResultSet *result = NULL;
-    sql::PreparedStatement prepared_statement = NULL;
+    sql::PreparedStatement *prepared_statement = NULL;
     prepared_statement = conn->prepareStatement("SELECT * FROM versionrec WHERE idversionrec = ?");
     prepared_statement->setInt(1, idversionrec);
     result = prepared_statement->executeQuery();
@@ -122,17 +123,17 @@ void VersionRec::getData(sql::Connection& conn, int idversionrec)
         temp_blk_table.blknum = result->getInt(1);
         temp_blk_table.length = result->getInt(2);
         temp_blk_table.hash = result->getString(3);
-        temp_blk_table.data = result->getString(4);
+        temp_blk_table.data = result->getBlob(4);
         blktable_.push_back(temp_blk_table);
     }
     delete result;
     delete prepared_statement;
 }
 
-void VersionRec::setData(sql::Connection& conn)
+void VersionRec::setData(sql::Connection* conn)
 {
     sql::ResultSet *result = NULL;
-    sql::PreparedStatement prepared_statement = NULL;
+    sql::PreparedStatement *prepared_statement = NULL;
     prepared_statement = conn->prepareStatement("INSERT INTO versionrec VALUES(?, ?, ?, ?, ?, ?)");
     prepared_statement->setString(1, fileref_);
     prepared_statement->setInt(2, versionnum_);
@@ -155,7 +156,7 @@ void VersionRec::setData(sql::Connection& conn)
         prepared_statement->setInt(2, it1->number);
         prepared_statement->setInt(3, it1->length);
         prepared_statement->setString(4, it1->hash);
-        prepared_statement->setBlob(5, it1->data);
+        prepared_statement->setBlob(5, qCompress(it1->data));
         prepared_statement->execute();
     }
     delete result;

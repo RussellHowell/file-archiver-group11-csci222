@@ -3,66 +3,72 @@
 // * CSCI222
 // * Group 11
 // * 
-// * Author(s): Russell Howell 
-// * Last modified: September 13th, 2015
-// * Description:
+// * Author(s): Jack Robert Humphreys
+// * Last modified: September 28th, 2015
+// * Description: 
 // * Purpose:
-
-#include <QtCore/QCoreApplication>
-#include <QApplication>
-#include <QFile>
-#include <QDebug> 
-#include <fstream>
-#include <vector>
-#include <ctime>
-#include <QCryptographicHash>
-#include <QString>
-#include <QByteArray>
-
-
 
 #ifndef FILEREC_H
 #define	FILEREC_H
 
+#include "VersionRec.h"
+//#include <QtCore/QCoreApplication>
+//#include <QApplication>
+#include <QFile> 
+#include <QCryptographicHash>
+#include <QString>
+#include <fstream>
 
 class FileRec
 {
 public:
-   FileRec();
-   
-   void createData(QString path);
-   
-   QString getName();
-   QString getModifyTime();
-   qint64 getLength();
-   qint16 getVersionCount();
-   int getRefNumber();
-   QByteArray getFileHash(); 
-   std::vector<QByteArray> getBlockHashes();
-   std::vector<int> getVersions();
-   std::vector<std::string> getComments();
-   
+    FileRec();
+    std::string getFilename();
+    void setFilename(std::string);
+    std::string getCurhash();
+    void setCurhash(std::string);
+    std::string getOvhash();
+    void setOvhash(std::string);
+    int getCurrentversion();
+    void setCurrentversion(int);
+    int getNversions();
+    void setNversions(int);
+    int getLength();
+    void setLength(int);
+    int getMtsec();
+    void setMtsec(int);
+    int getMtnsec();
+    void setMtnsec(int);
+    std::string getBlobtableTempname();
+    void setBlobtableTempname(std::string);
+    std::vector<std::string> getBlktableHash();
+    void setBlktableHash(std::vector<std::string>);
+    std::vector<int> getBlktableLength();
+    void setBlktableLength(std::vector<int>);
+    std::vector<int> getIdversionrec();
+    void setIdversionrec(std::vector<int>);
+    std::vector<std::string> getCommenttxt();
+    void setCommenttxt(std::vector<std::string>);
     
+    void getData(sql::Connection*, std::string);
+    void setData(sql::Connection*);
+    
+    void createData(std::string);
+    VersionRec createVersionData(FileRec);
 private:
-    QString file_name_;
-    QString temp_name_; //name of BLOB record
-    QByteArray file_hash_;
-    qint64 size_; //length of the file in bytes
-    qint16 number_of_versions_; 
-    int ref_number_;
-     std::vector<QByteArray> block_hashes_; // store lengths also
-     std::vector<int> version_ids_;
-     std::vector<std::string> comments_;
-    void readBlocks(const QFile&);
-    
-    struct modify_time_
-    {
-        int day, month, year, hour, minute, second;
-    }timespec_;
-    
-    
+    std::string filename_;
+    std::string curhash_;
+    std::string ovhash_;
+    int currentversion_;
+    int nversions_;
+    int length_;
+    int mtsec_;
+    int mtnsec_;
+    std::string blobtable_tempname_;
+    std::vector<std::string> blktable_hashval_;
+    std::vector<int> blktable_length_;
+    std::vector<int> idversionrec_;
+    std::vector<std::string> commenttxt_;
 };
 
-
-#endif	/* FILEREC_H */
-
+#endif
