@@ -10,6 +10,7 @@
 
 #include "FileRec.h"
 #include <boost/chrono.hpp>
+#include <pair>
 
 const int BLOCKSIZE = 4000;
 
@@ -22,17 +23,17 @@ FileRec::FileRec()
 
 std::string FileRec::getFilename()
 {
-    
+    return filename_;
 }
 
-void FileRec::setFilename(std::string)
+void FileRec::setFilename(std::string filename)
 {
-    
+    filename_ = filename;
 }
 
 std::string FileRec::getCurhash()
 {
-    
+    return curhash_;
 }
 
 void FileRec::setCurhash(std::string curhash)
@@ -100,12 +101,12 @@ void FileRec::setMtnsec(int mtnsec)
     mtnsec_ = mtnsec;
 }
 
-std::string FileRec::getBlobtableTempname()
+int FileRec::getBlobtableTempname()
 {
     return blobtable_tempname_;
 }
 
-void FileRec::setBlobtableTempname(std::string blobtable_tempname)
+void FileRec::setBlobtableTempname(int blobtable_tempname)
 {
     blobtable_tempname_ = blobtable_tempname;
 }
@@ -127,7 +128,7 @@ std::vector<int> FileRec::getBlktableLength()
 
 void FileRec::setBlktableLength(std::vector<int> blktable_length)
 {
-    blktable_length_ = blktable_length_;
+    blktable_length_ = blktable_length;
 }
 
 std::vector<int> FileRec::getIdversionrec()
@@ -150,7 +151,7 @@ void FileRec::setCommenttxt(std::vector<std::string> commenttxt)
     commenttxt_ = commenttxt;
 }
 
-void FileRec::getData(sql::Connection* conn, int file_name)
+void FileRec::getData(sql::Connection* conn, std::string file_name)
 {
     sql::ResultSet *result = NULL;
     sql::PreparedStatement *prepared_statement = NULL;
@@ -166,7 +167,8 @@ void FileRec::getData(sql::Connection* conn, int file_name)
         nversions_ = result->getInt(5);
         length_ = result->getInt(6);
         mtsec_ = result->getInt(7);
-        mtnsec_ result->getInt(8);
+        mtnsec_ = result->getInt(8);
+        blobtable_tempname_ = result->getInt(9);
     }
     prepared_statement = conn->prepareStatement("SELECT idversionrec FROM versionrec WHERE fileref = ?");
     prepared_statement->setString(1, filename_);
@@ -207,8 +209,8 @@ void FileRec::setData(sql::Connection* conn)
     prepared_statement->setInt(6, length_);
     prepared_statement->setInt(7, mtsec_);
     prepared_statement->setInt(8, mtsec_);
-    prepared_statement->setString(9, blobtable_tempname_);
-    prepared_statement->execute();
+    prepared_statement->setInt(9, blobtable_tempname_);
+    prepared_statement->executeQuery();
     int blknum = 0;
     std::vector<std::string>::iterator it2 = blktable_length_.begin();
     for(std::vector<std::string>::iterator it1 = blktable_hashval_.begin(); it1 != blktable_hashval_.end(); ++it1)
@@ -218,7 +220,7 @@ void FileRec::setData(sql::Connection* conn)
         prepared_statement->setInt(2, blknum);
         prepared_statement->setString(3, *it1);
         prepared_statement->setInt(4, *it2);
-        prepared_statement->execute();
+        prepared_statement->executeQuery();
         ++blknum;
         ++it2;
     }
@@ -249,7 +251,7 @@ void FileRec::createData(std::string file_name)
     QByteArray buffer;
     
     while(!temp_file.atEnd())
-    {   
+    {
         buffer = const_cast<QFile&>(temp_file).read(BLOCKSIZE);
         ov_crypto.addData(buffer);
         blktable_hashval_.push_back(blk_crypto.hash(buffer, QCryptographicHash::Md5));
@@ -260,5 +262,72 @@ void FileRec::createData(std::string file_name)
 
 VersionRec FileRec::createVersionData(FileRec current_save)
 {
+    VersionRec update;
+    std::vector<BlkTable> temp_blktable;
+    BlkTable temp_blk;
+    QFile temp_file(filename_); 
+    if(!temp_file.open(QFile::ReadOnly))
+    {
+        throw (NO_FILE);
+    };
     
+    boost::chrono::system_clock::time_point current_time = boost::chrono::system_clock::now();
+    boost::chrono::seconds sec = current_time;
+    boost::chrono::nanoseconds nanosec = current_time;
+    update.setMtsec(sec.count());
+    update.setMtsec(nanosec.count() %  sec.count());
+    
+    update.setLength(temp_file.size());
+    update.setFileref(temp_file.fileName());
+    
+    update.setVersionnum(current_save.getNversions() + 1);
+    
+    QCryptographicHash blk_crypto(QCryptographicHash::Md5);
+    QCryptographicHash ov_crypto(QCryptographicHash::Md5);
+    
+    QByteArray buffer;
+    
+    std::string hash;
+    
+    std::vector<std::pair<std::string, int> hashes;
+    
+    std::vector<int> length_it = current_save.getBlktableLength().begin();
+    for(std::vector<std::string> it1 = current_save.getBlktableHash().begin(); it1 != current_save.getBlktableHash().end(); ++it1)
+    {
+        if(*length_it == BLOCKSIZE)
+        {
+            hashes.push_back(it1);
+        }
+        else
+        {
+            temp_blk.blknum = it1 - current_save.getBlktableHash().begin();
+            temp_blk.data = NULL;
+            temp_blk.hash = *it1;
+            temp_blk.length = 0;
+            temp_blktable.push_back(temp_blk);
+        }
+        ++length_it;
+    }
+    int pos;
+    for(std::vector<std::pair<std::string, int>> it1 = hashes.begin(); (it1 != hashes.end()) && (!temp_file.atEnd()); ++it1)     
+    {
+        buffer = const_cast<QFile&>(temp_file).read(BLOCKSIZE);
+        ov_crypto.addData(buffer);
+        hash = blk_crypto.hash(buffer, QCryptographicHash::Md5);
+        if(it1->first != hash)
+        {
+            pos = temp_file.tellg();
+        }
+        while(it2 != pos)
+        {
+            temp_blk.blknum = it1->second;
+            temp_blk.data = qCompress(buffer);
+            temp_blk.hash = hash;
+            temp_blk.length = buffer.size();
+            temp_blktable.push_back(temp_blk);
+        }
+    }
+    update.setBlktable(temp_blktable);
+    update.setOvhash(ov_crypto.result());
+    temp_file.close();
 }

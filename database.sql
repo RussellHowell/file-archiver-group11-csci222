@@ -24,8 +24,8 @@ INDEX `fk_filerec` (`blobtable_filename` ASC),
 CONSTRAINT `fk_filerec`
     FOREIGN KEY (`blobtable_filename`)
     REFERENCES `mydb`.`blobtable` (`tempname`)
-    ON DELETE NO ACTION 
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`versionrec`(
@@ -41,8 +41,8 @@ INDEX `fk_versionrec` (`fileref` ASC),
 CONSTRAINT `fk_versionrec`
     FOREIGN KEY(`fileref`)
     REFERENCES `mydb`.`filerec`(`filename`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`commentstable`(
@@ -54,21 +54,22 @@ INDEX `fk_commentstable` (`fileref` ASC),
 CONSTRAINT `fk_commentstable`
     FOREIGN KEY(`fileref`)
     REFERENCES `mydb`.`filerec`(`filename`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`fileblkhashes`(
 `fileref` VARCHAR(255) NOT NULL,
 `blknum` INT(11) NOT NULL,
 `hashval` VARCHAR(45),
+`length` INT(11),
 PRIMARY KEY(`fileref`, `blknum`),
 INDEX `fk_fileblkhashes` (`fileref` ASC),
 CONSTRAINT `fk_fileblkhashes`
     FOREIGN KEY(`fileref`)
     REFERENCES `mydb`.`filerec`(`filename`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`blktable`(
@@ -82,6 +83,6 @@ INDEX `fk_blktable` (`version` ASC),
 CONSTRAINT `fk_blktable`
     FOREIGN KEY(`version`)
     REFERENCES `mydb`.`versionrec`(`idversionrec`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ENGINE = InnoDB;

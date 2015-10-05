@@ -12,8 +12,6 @@
 #define	FILEREC_H
 
 #include "VersionRec.h"
-//#include <QtCore/QCoreApplication>
-//#include <QApplication>
 #include <QFile> 
 #include <QCryptographicHash>
 #include <QString>
@@ -39,8 +37,8 @@ public:
     void setMtsec(int);
     int getMtnsec();
     void setMtnsec(int);
-    std::string getBlobtableTempname();
-    void setBlobtableTempname(std::string);
+    int getBlobtableTempname();
+    void setBlobtableTempname(int);
     std::vector<std::string> getBlktableHash();
     void setBlktableHash(std::vector<std::string>);
     std::vector<int> getBlktableLength();
@@ -64,7 +62,7 @@ private:
     int length_;
     int mtsec_;
     int mtnsec_;
-    std::string blobtable_tempname_;
+    int blobtable_tempname_;
     std::vector<std::string> blktable_hashval_;
     std::vector<int> blktable_length_;
     std::vector<int> idversionrec_;

@@ -12,8 +12,6 @@
 #define	VERSIONREC_H
 
 #include "mysql_connection.h"
-#include "cppconn/connection.h"
-//#include <QtCore/QCoreApplication>
 #include <QByteArray>
 #include <vector>
 #include <string>

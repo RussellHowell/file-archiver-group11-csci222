@@ -10,6 +10,7 @@
 
 #include "VersionRec.h"
 #include "cppconn/prepared_statement.h"
+#include "cppconn/connection.h"
 #include <cppconn/resultset.h>
 
 VersionRec::VersionRec()
@@ -89,7 +90,7 @@ void VersionRec::setOvhash(std::string ovhash)
 
 std::vector<BlkTable> VersionRec::getBlktable()
 {
-    return idversionrec_;
+    return blktable_;
 }
 
 void VersionRec::setBlktable(std::vector<BlkTable> blktable)
