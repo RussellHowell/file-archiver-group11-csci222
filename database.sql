@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `filearchiver`.`versionrec`(
 `mtsec` INT(11),
 `mtnsec` INT(11),
 `ovhash` VARCHAR(45),
-PRIMARY KEY(`idversion`),
+PRIMARY KEY(`idversionrec`),
 INDEX `fk_versionrec` (`fileref` ASC),
 CONSTRAINT `fk_versionrec`
     FOREIGN KEY(`fileref`)
