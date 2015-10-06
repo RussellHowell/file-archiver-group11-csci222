@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'Retriever.ui'
 **
-** Created by: Qt User Interface Compiler version 5.2.1
+** Created by: Qt User Interface Compiler version 4.8.6
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -10,16 +10,16 @@
 #define UI_RETRIEVER_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QButtonGroup>
-#include <QtWidgets/QDialog>
-#include <QtWidgets/QHBoxLayout>
-#include <QtWidgets/QHeaderView>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLineEdit>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QWidget>
+#include <QtGui/QAction>
+#include <QtGui/QApplication>
+#include <QtGui/QButtonGroup>
+#include <QtGui/QDialog>
+#include <QtGui/QHBoxLayout>
+#include <QtGui/QHeaderView>
+#include <QtGui/QLabel>
+#include <QtGui/QLineEdit>
+#include <QtGui/QPushButton>
+#include <QtGui/QWidget>
 
 QT_BEGIN_NAMESPACE
 
@@ -41,16 +41,16 @@ public:
     void setupUi(QDialog *retriever)
     {
         if (retriever->objectName().isEmpty())
-            retriever->setObjectName(QStringLiteral("retriever"));
+            retriever->setObjectName(QString::fromUtf8("retriever"));
         retriever->resize(448, 294);
         layoutWidget = new QWidget(retriever);
-        layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
+        layoutWidget->setObjectName(QString::fromUtf8("layoutWidget"));
         layoutWidget->setGeometry(QRect(10, 20, 401, 29));
         horizontalLayout = new QHBoxLayout(layoutWidget);
-        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
+        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
         horizontalLayout->setContentsMargins(0, 0, 0, 0);
         label = new QLabel(layoutWidget);
-        label->setObjectName(QStringLiteral("label"));
+        label->setObjectName(QString::fromUtf8("label"));
         QFont font;
         font.setPointSize(10);
         label->setFont(font);
@@ -58,25 +58,25 @@ public:
         horizontalLayout->addWidget(label);
 
         directoryedit = new QLineEdit(layoutWidget);
-        directoryedit->setObjectName(QStringLiteral("directoryedit"));
+        directoryedit->setObjectName(QString::fromUtf8("directoryedit"));
 
         horizontalLayout->addWidget(directoryedit);
 
         selectfile = new QPushButton(layoutWidget);
-        selectfile->setObjectName(QStringLiteral("selectfile"));
+        selectfile->setObjectName(QString::fromUtf8("selectfile"));
 
         horizontalLayout->addWidget(selectfile);
 
         layoutWidget1 = new QWidget(retriever);
-        layoutWidget1->setObjectName(QStringLiteral("layoutWidget1"));
+        layoutWidget1->setObjectName(QString::fromUtf8("layoutWidget1"));
         layoutWidget1->setGeometry(QRect(10, 90, 321, 29));
         horizontalLayout_2 = new QHBoxLayout(layoutWidget1);
-        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
+        horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
         horizontalLayout_2->setContentsMargins(0, 0, 0, 0);
         label_2 = new QLabel(layoutWidget1);
-        label_2->setObjectName(QStringLiteral("label_2"));
+        label_2->setObjectName(QString::fromUtf8("label_2"));
         QFont font1;
-        font1.setFamily(QStringLiteral("Microsoft YaHei Light"));
+        font1.setFamily(QString::fromUtf8("Microsoft YaHei Light"));
         font1.setPointSize(10);
         font1.setBold(true);
         font1.setWeight(75);
@@ -85,15 +85,15 @@ public:
         horizontalLayout_2->addWidget(label_2);
 
         nameedit = new QLineEdit(layoutWidget1);
-        nameedit->setObjectName(QStringLiteral("nameedit"));
+        nameedit->setObjectName(QString::fromUtf8("nameedit"));
 
         horizontalLayout_2->addWidget(nameedit);
 
         OK_retrieve = new QPushButton(retriever);
-        OK_retrieve->setObjectName(QStringLiteral("OK_retrieve"));
+        OK_retrieve->setObjectName(QString::fromUtf8("OK_retrieve"));
         OK_retrieve->setGeometry(QRect(348, 240, 81, 27));
         cancel = new QPushButton(retriever);
-        cancel->setObjectName(QStringLiteral("cancel"));
+        cancel->setObjectName(QString::fromUtf8("cancel"));
         cancel->setGeometry(QRect(260, 240, 81, 27));
 
         retranslateUi(retriever);
@@ -103,12 +103,12 @@ public:
 
     void retranslateUi(QDialog *retriever)
     {
-        retriever->setWindowTitle(QApplication::translate("retriever", "Dialog", 0));
-        label->setText(QApplication::translate("retriever", "Directory:", 0));
-        selectfile->setText(QApplication::translate("retriever", "Select", 0));
-        label_2->setText(QApplication::translate("retriever", "Filename", 0));
-        OK_retrieve->setText(QApplication::translate("retriever", "OK", 0));
-        cancel->setText(QApplication::translate("retriever", "Cancel", 0));
+        retriever->setWindowTitle(QApplication::translate("retriever", "Dialog", 0, QApplication::UnicodeUTF8));
+        label->setText(QApplication::translate("retriever", "Directory:", 0, QApplication::UnicodeUTF8));
+        selectfile->setText(QApplication::translate("retriever", "Select", 0, QApplication::UnicodeUTF8));
+        label_2->setText(QApplication::translate("retriever", "Filename", 0, QApplication::UnicodeUTF8));
+        OK_retrieve->setText(QApplication::translate("retriever", "OK", 0, QApplication::UnicodeUTF8));
+        cancel->setText(QApplication::translate("retriever", "Cancel", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 
 };

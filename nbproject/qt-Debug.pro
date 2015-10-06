@@ -2,15 +2,15 @@
 # Use project properties -> Build -> Qt -> Expert -> Custom Definitions.
 TEMPLATE = app
 DESTDIR = dist/Debug/GNU-Linux-x86
-TARGET = Archiver
+TARGET = file-archiver-group11-csci222-master
 VERSION = 1.0.0
 CONFIG -= debug_and_release app_bundle lib_bundle
 CONFIG += debug 
 PKGCONFIG +=
 QT = core gui widgets
-SOURCES += FileArchiver.cpp FileRec.cpp MyTableModel.cpp VersionRec.cpp archiver.cpp fileexplorer.cpp getcomment.cpp main.cpp retriever.cpp setreference.cpp
-HEADERS += FileArchiver.h FileRec.h MyTableModel.h VersionInfoRecord.h VersionRec.h archiver.h fileexplorer.h getcomment.h retriever.h setreference.h ui_archiver.h ui_fileexplorer.h ui_getcomment.h ui_retriever.h ui_setreference.h
-FORMS += archiver.ui fileexplorer.ui getcomment.ui retriever.ui setreference.ui
+SOURCES += /home/undergrad/j/jrh785/NetBeansProjects/file-archiver-group11-csci222-master/Archiver.cpp /home/undergrad/j/jrh785/NetBeansProjects/file-archiver-group11-csci222-master/GetComment.cpp /home/undergrad/j/jrh785/NetBeansProjects/file-archiver-group11-csci222-master/Retriever.cpp /home/undergrad/j/jrh785/NetBeansProjects/file-archiver-group11-csci222-master/main.cpp FileArchiver.cpp FileRec.cpp VersionRec.cpp
+HEADERS += /home/undergrad/j/jrh785/NetBeansProjects/file-archiver-group11-csci222-master/Archiver.h /home/undergrad/j/jrh785/NetBeansProjects/file-archiver-group11-csci222-master/GetComment.h /home/undergrad/j/jrh785/NetBeansProjects/file-archiver-group11-csci222-master/Retriever.h /home/undergrad/j/jrh785/NetBeansProjects/file-archiver-group11-csci222-master/ui_Archiver.h /home/undergrad/j/jrh785/NetBeansProjects/file-archiver-group11-csci222-master/ui_GetComment.h /home/undergrad/j/jrh785/NetBeansProjects/file-archiver-group11-csci222-master/ui_Retriever.h FileArchiver.h FileRec.h VersionRec.h
+FORMS += /home/undergrad/j/jrh785/NetBeansProjects/file-archiver-group11-csci222-master/Archiver.ui /home/undergrad/j/jrh785/NetBeansProjects/file-archiver-group11-csci222-master/GetComment.ui /home/undergrad/j/jrh785/NetBeansProjects/file-archiver-group11-csci222-master/Retriever.ui
 RESOURCES +=
 TRANSLATIONS +=
 OBJECTS_DIR = build/Debug/GNU-Linux-x86
@@ -20,5 +20,5 @@ UI_DIR =
 QMAKE_CC = gcc
 QMAKE_CXX = g++
 DEFINES += 
-INCLUDEPATH += 
-LIBS += 
+INCLUDEPATH += /usr/include/boost/iostreams /usr/include/cppconn /usr/include/qt4 
+LIBS += -Wl,-rpath,/usr/lib /usr/lib/libmysqlcppconn.so -Wl,-rpath,/usr/lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu/libQtCore.so -Wl,-rpath,/usr/lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu/libQtGui.so -Wl,-rpath,/usr/lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu/libboost_chrono.so -Wl,-rpath,/usr/lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu/libboost_iostreams.so -Wl,-rpath,/usr/lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu/libboost_system.so -Wl,-rpath,/usr/lib/x86_64-linux-gnu /usr/lib/x86_64-linux-gnu/libboost_date_time.so  

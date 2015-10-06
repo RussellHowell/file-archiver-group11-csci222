@@ -8,6 +8,7 @@
 #ifndef ARCHIVER_H
 #define ARCHIVER_H
 
+#include "FileArchiver.h"
 #include <QMainWindow>
 #include "GetComment.h"
 #include "Retriever.h"
@@ -57,15 +58,14 @@ private slots:
 
 private:
     Ui::Archiver *ui;
-    QStandardItemModel * model;
+    FileArchiver file_archiver;
+    QStandardItemModel *model;
     QString fileName;
     int version_number;
 
 
 
 };
-
-
 
 
 #endif // ARCHIVER_H

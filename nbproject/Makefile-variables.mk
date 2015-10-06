@@ -9,19 +9,19 @@ CND_DISTDIR=dist
 # Debug configuration
 CND_PLATFORM_Debug=GNU-Linux-x86
 CND_ARTIFACT_DIR_Debug=dist/Debug/GNU-Linux-x86
-CND_ARTIFACT_NAME_Debug=Archiver
-CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux-x86/Archiver
+CND_ARTIFACT_NAME_Debug=file-archiver-group11-csci222-master
+CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux-x86/file-archiver-group11-csci222-master
 CND_PACKAGE_DIR_Debug=dist/Debug/GNU-Linux-x86/package
-CND_PACKAGE_NAME_Debug=Archiver.tar
-CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux-x86/package/Archiver.tar
+CND_PACKAGE_NAME_Debug=file-archiver-group11-csci222-master.tar
+CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux-x86/package/file-archiver-group11-csci222-master.tar
 # Release configuration
 CND_PLATFORM_Release=GNU-Linux-x86
 CND_ARTIFACT_DIR_Release=dist/Release/GNU-Linux-x86
-CND_ARTIFACT_NAME_Release=Archiver
-CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux-x86/Archiver
+CND_ARTIFACT_NAME_Release=file-archiver-group11-csci222-master
+CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux-x86/file-archiver-group11-csci222-master
 CND_PACKAGE_DIR_Release=dist/Release/GNU-Linux-x86/package
-CND_PACKAGE_NAME_Release=Archiver.tar
-CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux-x86/package/Archiver.tar
+CND_PACKAGE_NAME_Release=file-archiver-group11-csci222-master.tar
+CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux-x86/package/file-archiver-group11-csci222-master.tar
 #
 # include compiler specific variables
 #

@@ -9,16 +9,13 @@
 #include <QtGui>
 #include <QtCore>
 #include "Archiver.h"
-//#include "FileArchiver.h"
 #include "ui_Archiver.h"
 #include <QStandardItemModel>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <time.h>
-//#include <boost/date_time/posix_time/posix_time.hpp>
-//#include <boost/date_time/gregorian/gregorian_types.hpp>
-
-QVector<item> vector(3);
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/date_time/gregorian/gregorian_types.hpp>
 
 Archiver::Archiver(QWidget *parent) :
     QMainWindow(parent),
@@ -44,7 +41,7 @@ Archiver::Archiver(QWidget *parent) :
     QHeaderView* header = ui->fileviewer->horizontalHeader();
     header->setStretchLastSection(true);
     ui->fileviewer->setHorizontalHeader(header);
-
+/*
     //===============================================================================
     //      TESTING VECTOR INTO TABLEVIEW (REMOVE WHEN TESTING WITH ACTUAL DATA)
 
@@ -64,7 +61,7 @@ Archiver::Archiver(QWidget *parent) :
 
 
     //===============================================================================
-
+*/
 
 
     ui->fileviewer->setModel(model);
@@ -86,17 +83,16 @@ void Archiver::on_file_button_clicked()
 
     this->retrieveVersionDataForFile();
 
-    /*
-    if(FileArchiver::exists(fileName))
+    if(file_archiver.exists(fileName.toStdString()))
     {
-        this->retrieveVersionDataForFile(fileName);
+        this->retrieveVersionDataForFile();
     }
 
     else
     {
         this->createFirstVersion();
     }
-    */
+    
     
 
 
@@ -200,9 +196,9 @@ void Archiver::on_comment_button_clicked()
 void Archiver::on_fileviewer_activated(const QModelIndex &index)
 {
 
-    //std::vector<VersionInfo> x;
-    //x = FileArchiver::getVersionInfo(fileName);
-    //version_number = x[index.row()].id;
+    std::vector<VersionInfo> x;
+    x = file_archiver.getVersionInfo(fileName.toStdString());
+    version_number = x[index.row()].versionnum;
 
 
 }
@@ -213,17 +209,6 @@ void Archiver::on_fileviewer_activated(const QModelIndex &index)
 void Archiver::populate()
 {
 
-    vector[0].time = "12.00pm";
-    vector[0].version = "1";
-    vector[0].size = "100";
-
-    vector[1].time = "11.00pm";
-    vector[1].version = "2";
-    vector[1].size = "200";
-
-    vector[2].time = "10.00pm";
-    vector[2].version = "3";
-    vector[2].size = "99";
 }
 
 
@@ -232,8 +217,8 @@ void Archiver::retrieveVersionDataForFile()
 {
     model->clear();
 
-    //std::vector<VersionInfo> x;
-    //x = FileArchiver::getVersionInfo(filename);
+    std::vector<VersionInfo> x;
+    x = file_archiver.getVersionInfo(fileName.toStdString());
 
     //set the table view
     model = new QStandardItemModel(0,3,this);
@@ -249,7 +234,7 @@ void Archiver::retrieveVersionDataForFile()
     QHeaderView* header = ui->fileviewer->horizontalHeader();
     header->setStretchLastSection(true);
     ui->fileviewer->setHorizontalHeader(header);
-
+/*
     //============================================================
     // RANDOM TEST DATA (REMOVE THIS!)
     for(int i=0; i <2 ; i++)
@@ -263,30 +248,31 @@ void Archiver::retrieveVersionDataForFile()
         model->setItem(i,2,first3);
     }
     //============================================================
-
-    /*
+*/
+    int i = 0;
     for(std::vector<VersionInfo>::iterator it = x.begin(); it != x.end(); ++it)
     {
-        QStandardItem *first1 = new QStandardItem(QString(*it.id));
+        QStandardItem *first1 = new QStandardItem(QString(it->versionnum));
 
-        int seconds = *it.mtsec;
-        int nano = *it.mtnsec;
+        int seconds = it->mtsec;
+        int nano = it->mtnsec;
 
-        boost::posix_time::ptime m_DateTime = ptime(date(1970, 1, 1), time_duration(0,0,0, time_duration::ticks_per_second()
-                                                    * (time_duration::fractional_seconds_type)_seconds));
+        boost::posix_time::ptime m_DateTime =  boost::posix_time::ptime( boost::gregorian::date(1970, 1, 1),  boost::posix_time::time_duration(0,0,0,  boost::posix_time::time_duration::ticks_per_second()
+                                                    * ( boost::posix_time::time_duration::fractional_seconds_type)seconds));
 
 
         //convert the time here
-        std::string time = to_simple_string(m_DateTime);
-
-        QStandardItem *first2 = new QStandardItem(QString(time));
-        QStandardItem *first3 = new QStandardItem(QString(*it.length));
+        std::string time =  boost::posix_time::to_simple_string(m_DateTime);
+        time += nano;
+        QStandardItem *first2 = new QStandardItem(QString(time.c_str()));
+        QStandardItem *first3 = new QStandardItem(QString(it->length));
 
         model->setItem(i,0,first1);
         model->setItem(i,1,first2);
         model->setItem(i,2,first3);
+        ++i;
     }
-    */
+    
 
     ui->fileviewer->setModel(model);
 }
@@ -303,7 +289,7 @@ void Archiver::createFirstVersion()
     //get comment
     QString comment = addComment->return_comment();
 
-    //FileArchiver::insertNew(fileName,comment)
+    file_archiver.insertNew(fileName.toStdString(),comment.toStdString());
     this->retrieveVersionDataForFile();
 }
 

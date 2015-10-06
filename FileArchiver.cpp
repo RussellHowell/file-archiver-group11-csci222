@@ -24,7 +24,7 @@ const char *DB_EXCEPTION = "Database Failure! Operation failed. ";
 const char *DB_SERVER = "tcp://127.0.0.1:3306";
 const char *DB_USERNAME = "student26";
 const char *DB_PASSWORD = "XMg5w6gW";
-const char *DB_SCHEMA = "student26";
+const char *DB_SCHEMA = "filearchiver";
 
 FileArchiver::FileArchiver()
 {
@@ -165,7 +165,7 @@ void FileArchiver::update(std::string file_name)
     temp_version.setData(conn_);
     sql::PreparedStatement *prepared_statement = NULL;
     prepared_statement = conn_->prepareStatement("UPDATE filerec SET nversions = nversions + 1, curhash = ?, length = ? WHERE filename = ?");
-    prepared_statement->setInt(1, temp_version.getOvhash());
+    prepared_statement->setString(1, temp_version.getOvhash());
     prepared_statement->setInt(2, temp_version.getLength());
     prepared_statement->setString(3, file_name);
     prepared_statement->executeQuery();

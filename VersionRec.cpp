@@ -11,7 +11,8 @@
 #include "VersionRec.h"
 #include "cppconn/prepared_statement.h"
 #include "cppconn/connection.h"
-#include <cppconn/resultset.h>
+#include "cppconn/resultset.h"
+#include <sstream>
 
 VersionRec::VersionRec()
 {
@@ -23,9 +24,9 @@ int VersionRec::getIdversionrec()
     return idversionrec_;
 }
 
-void VersionRec::setIdversionrec(int)
+void VersionRec::setIdversionrec(int idversionrec)
 {
-    
+    idversionrec_ = idversionrec;
 }
 
 std::string VersionRec::getFileref()
@@ -33,9 +34,9 @@ std::string VersionRec::getFileref()
     return fileref_;
 }
 
-void VersionRec::setFileref(std::string)
+void VersionRec::setFileref(std::string fileref)
 {
-    
+    fileref_ = fileref;
 }
 
 int VersionRec::getVersionnum()
@@ -112,7 +113,7 @@ void VersionRec::getData(sql::Connection* conn, int idversionrec)
         versionnum_ = result->getInt(3);
         length_ = result->getInt(4);
         mtsec_ = result->getInt(5);
-        mtnsec_ result->getInt(6);
+        mtnsec_ = result->getInt(6);
         ovhash_ = result->getString(7);
     }
     prepared_statement = conn->prepareStatement("SELECT blknum, length, hash, data FROM blktable WHERE version = ?");
@@ -124,7 +125,7 @@ void VersionRec::getData(sql::Connection* conn, int idversionrec)
         temp_blk_table.blknum = result->getInt(1);
         temp_blk_table.length = result->getInt(2);
         temp_blk_table.hash = result->getString(3);
-        temp_blk_table.data = result->getBlob(4);
+        temp_blk_table.data = (const char *)result->getBlob(4);
         blktable_.push_back(temp_blk_table);
     }
     delete result;
@@ -142,9 +143,9 @@ void VersionRec::setData(sql::Connection* conn)
     prepared_statement->setInt(4, mtsec_);
     prepared_statement->setInt(5, mtnsec_);
     prepared_statement->setString(6, ovhash_);
-    prepared_statement->execute();
+    prepared_statement->executeQuery();
     prepared_statement = conn->prepareStatement("SELECT LAST_INSERT_ID()");
-    result = prepared_statement->execute();
+    result = prepared_statement->executeQuery();
     int version_id;
     while(result->next())
     {
@@ -152,13 +153,14 @@ void VersionRec::setData(sql::Connection* conn)
     }
     for(std::vector<BlkTable>::iterator it1 = blktable_.begin(); it1 != blktable_.end(); ++it1)
     {
-        sql::PreparedStatement prepared_statement = conn->prepareStatement("INSERT INTO blktable VALUES(?, ?, ?, ?, ?)");
+        sql::PreparedStatement *prepared_statement = conn->prepareStatement("INSERT INTO blktable VALUES(?, ?, ?, ?, ?)");
         prepared_statement->setInt(1, version_id);
-        prepared_statement->setInt(2, it1->number);
+        prepared_statement->setInt(2, it1->blknum);
         prepared_statement->setInt(3, it1->length);
         prepared_statement->setString(4, it1->hash);
-        prepared_statement->setBlob(5, qCompress(it1->data));
-        prepared_statement->execute();
+        std::istringstream iss((const char *)qCompress(it1->data));
+        prepared_statement->setBlob(5, &iss);
+        prepared_statement->executeQuery();
     }
     delete result;
     delete prepared_statement;
