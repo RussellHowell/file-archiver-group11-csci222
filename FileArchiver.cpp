@@ -22,8 +22,8 @@
 
 const char *DB_EXCEPTION = "Database Failure! Operation failed. ";
 const char *DB_SERVER = "tcp://127.0.0.1:3306";
-const char *DB_USERNAME = "student26";
-const char *DB_PASSWORD = "XMg5w6gW";
+const char *DB_USERNAME = "student25";
+const char *DB_PASSWORD = "XSK7Ag_J";
 const char *DB_SCHEMA = "filearchiver";
 
 FileArchiver::FileArchiver()
