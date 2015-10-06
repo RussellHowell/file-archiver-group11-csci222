@@ -19,6 +19,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
+#include <QDebug>
 
 const char *DB_EXCEPTION = "Database Failure! Operation failed. ";
 const char *DB_SERVER = "tcp://127.0.0.1:3306";
@@ -28,6 +29,7 @@ const char *DB_SCHEMA = "student25";
 
 FileArchiver::FileArchiver()
 {
+    counter_ = 0;
     invalid_ = true;
     driver_ = get_driver_instance();
     try
@@ -126,25 +128,31 @@ void FileArchiver::insertNew(std::string file_name, std::string comment)
         throw (DB_EXCEPTION);
     }
     FileRec temp_file;
+
     temp_file.createData(file_name);
+
+
     std::vector<std::string> temp_commenttxt = temp_file.getCommenttxt();
     temp_commenttxt.push_back(comment);
     temp_file.setCommenttxt(temp_commenttxt);
+    
     std::string zipped_file = createZipFile(file_name);
     sql::ResultSet *result = NULL;
     sql::PreparedStatement *prepared_statement = NULL;
-    prepared_statement = conn_->prepareStatement("INSERT INTO blobtable VALUES(?)");
+    prepared_statement = conn_->prepareStatement("INSERT INTO blobtable VALUES(?, ?)");
     std::ifstream blob_file;
     blob_file.open(zipped_file.c_str(), std::ios::in | std::ios::binary);
-    prepared_statement->setBlob(1, &blob_file);
+    prepared_statement->setInt(1, ++counter_);
+    prepared_statement->setBlob(2, &blob_file);
     prepared_statement->executeQuery();
     blob_file.close();
-    prepared_statement = conn_->prepareStatement("SELECT LAST_INSERT_ID()");
+    /*prepared_statement = conn_->prepareStatement("SELECT LAST_INSERT_ID()");
     result = prepared_statement->executeQuery();
     while(result->next())
     {
         temp_file.setBlobtableTempname(result->getInt(1));
-    }
+    }*/
+    temp_file.setBlobtableTempname(counter_);
     temp_file.setData(conn_);
     delete result;
     delete prepared_statement;

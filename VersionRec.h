@@ -56,6 +56,9 @@ private:
     int length_;
     int mtsec_;
     int mtnsec_;
+    
+    int counter_;
+    
     std::string ovhash_;
     std::vector<BlkTable> blktable_;
 };

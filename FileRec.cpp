@@ -14,6 +14,7 @@
 #include "cppconn/resultset.h"
 #include <boost/chrono.hpp>
 #include <utility>
+#include <QDebug>
 
 const int BLOCKSIZE = 4000;
 
@@ -215,18 +216,22 @@ void FileRec::setData(sql::Connection* conn)
     prepared_statement->setInt(9, blobtable_tempname_);
     prepared_statement->executeQuery();
     int blknum = 0;
-    std::vector<int>::iterator it2 = blktable_length_.begin();
-    for(std::vector<std::string>::iterator it1 = blktable_hashval_.begin(); it1 != blktable_hashval_.end(); ++it1)
+    
+    if(!blktable_length_.empty())
     {
-        prepared_statement = conn->prepareStatement("INSERT INTO fileblkhashes VALUES(?, ?, ?, ?)");
-        prepared_statement->setString(1, filename_);
-        prepared_statement->setInt(2, blknum);
-        prepared_statement->setString(3, *it1);
-        prepared_statement->setInt(4, *it2);
-        prepared_statement->executeQuery();
-        ++blknum;
-        ++it2;
-    }
+        std::vector<int>::iterator it2 = blktable_length_.begin();
+        for(std::vector<std::string>::iterator it1 = blktable_hashval_.begin(); it1 != blktable_hashval_.end(); ++it1)
+        {
+            prepared_statement = conn->prepareStatement("INSERT INTO fileblkhashes VALUES(?, ?, ?, ?)");
+            prepared_statement->setString(1, filename_);
+            prepared_statement->setInt(2, blknum);
+            prepared_statement->setString(3, *it1);
+            prepared_statement->setInt(4, *it2);
+            prepared_statement->executeQuery();
+            ++blknum;
+            ++it2;
+        }
+    }   
     delete result;
     delete prepared_statement;
 }
@@ -258,8 +263,10 @@ void FileRec::createData(std::string file_name)
         buffer = const_cast<QFile&>(temp_file).read(BLOCKSIZE);
         ov_crypto.addData(buffer);
         blktable_hashval_.push_back(blk_crypto.hash(buffer, QCryptographicHash::Md5).data());
+        blktable_length_.push_back(buffer.length());
     }
     curhash_ = ov_crypto.result().data();
+    ovhash_ = curhash_;
     temp_file.close();
 }
 

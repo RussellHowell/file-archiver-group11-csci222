@@ -136,13 +136,14 @@ void VersionRec::setData(sql::Connection* conn)
 {
     sql::ResultSet *result = NULL;
     sql::PreparedStatement *prepared_statement = NULL;
-    prepared_statement = conn->prepareStatement("INSERT INTO versionrec VALUES(?, ?, ?, ?, ?, ?)");
-    prepared_statement->setString(1, fileref_);
-    prepared_statement->setInt(2, versionnum_);
-    prepared_statement->setInt(3, length_);
-    prepared_statement->setInt(4, mtsec_);
-    prepared_statement->setInt(5, mtnsec_);
-    prepared_statement->setString(6, ovhash_);
+    prepared_statement = conn->prepareStatement("INSERT INTO versionrec VALUES(?, ?, ?, ?, ?, ?, ?)");
+    prepared_statement->setInt(1, ++counter_);
+    prepared_statement->setString(2, fileref_);
+    prepared_statement->setInt(3, versionnum_);
+    prepared_statement->setInt(4, length_);
+    prepared_statement->setInt(5, mtsec_);
+    prepared_statement->setInt(6, mtnsec_);
+    prepared_statement->setString(7, ovhash_);
     prepared_statement->executeQuery();
     prepared_statement = conn->prepareStatement("SELECT LAST_INSERT_ID()");
     result = prepared_statement->executeQuery();

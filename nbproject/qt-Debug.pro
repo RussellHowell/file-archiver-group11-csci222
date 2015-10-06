@@ -2,15 +2,15 @@
 # Use project properties -> Build -> Qt -> Expert -> Custom Definitions.
 TEMPLATE = app
 DESTDIR = dist/Debug/GNU-Linux-x86
-TARGET = file-archiver-group11-csci222-master
+TARGET = file-archiver-group11-csci222
 VERSION = 1.0.0
 CONFIG -= debug_and_release app_bundle lib_bundle
 CONFIG += debug 
 PKGCONFIG +=
 QT = core gui widgets
-SOURCES += /home/undergrad/j/jrh785/NetBeansProjects/file-archiver-group11-csci222-master/Archiver.cpp /home/undergrad/j/jrh785/NetBeansProjects/file-archiver-group11-csci222-master/GetComment.cpp /home/undergrad/j/jrh785/NetBeansProjects/file-archiver-group11-csci222-master/Retriever.cpp /home/undergrad/j/jrh785/NetBeansProjects/file-archiver-group11-csci222-master/main.cpp FileArchiver.cpp FileRec.cpp VersionRec.cpp
-HEADERS += /home/undergrad/j/jrh785/NetBeansProjects/file-archiver-group11-csci222-master/Archiver.h /home/undergrad/j/jrh785/NetBeansProjects/file-archiver-group11-csci222-master/GetComment.h /home/undergrad/j/jrh785/NetBeansProjects/file-archiver-group11-csci222-master/Retriever.h /home/undergrad/j/jrh785/NetBeansProjects/file-archiver-group11-csci222-master/ui_Archiver.h /home/undergrad/j/jrh785/NetBeansProjects/file-archiver-group11-csci222-master/ui_GetComment.h /home/undergrad/j/jrh785/NetBeansProjects/file-archiver-group11-csci222-master/ui_Retriever.h FileArchiver.h FileRec.h VersionRec.h
-FORMS += /home/undergrad/j/jrh785/NetBeansProjects/file-archiver-group11-csci222-master/Archiver.ui /home/undergrad/j/jrh785/NetBeansProjects/file-archiver-group11-csci222-master/GetComment.ui /home/undergrad/j/jrh785/NetBeansProjects/file-archiver-group11-csci222-master/Retriever.ui
+SOURCES += Archiver.cpp FileArchiver.cpp FileRec.cpp GetComment.cpp Retriever.cpp VersionRec.cpp main.cpp
+HEADERS += Archiver.h FileArchiver.h FileRec.h GetComment.h Retriever.h VersionRec.h ui_Archiver.h ui_GetComment.h ui_Retriever.h
+FORMS += Archiver.ui GetComment.ui Retriever.ui
 RESOURCES +=
 TRANSLATIONS +=
 OBJECTS_DIR = build/Debug/GNU-Linux-x86

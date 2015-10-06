@@ -52,7 +52,9 @@ private:
     
     std::string createZipFile(std::string);
     std::string unzipFile(std::string);
-
+    
+    int counter_;
+    
     sql::Connection *conn_;
     sql::Driver *driver_;
     bool invalid_;
