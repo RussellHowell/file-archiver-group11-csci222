@@ -1,4 +1,4 @@
-/**
+/*
  * Sukhdip Singh
  * 4806827
  * Assignment 1
@@ -41,25 +41,22 @@ Archiver::Archiver(QWidget *parent) :
     QHeaderView* header = ui->fileviewer->horizontalHeader();
     header->setStretchLastSection(true);
     ui->fileviewer->setHorizontalHeader(header);
+    
+     connect(this,SIGNAL(clicked(QModelIndex)),this,SLOT(clickedModel(QModelIndex)));
+
 /*
     //===============================================================================
     //      TESTING VECTOR INTO TABLEVIEW (REMOVE WHEN TESTING WITH ACTUAL DATA)
-
     this->populate();
-
     for(int i=0; i <3 ; i++)
     {
         QStandardItem *first1 = new QStandardItem(QString(vector[i].version));
         QStandardItem *first2 = new QStandardItem(QString(vector[i].time));
         QStandardItem *first3 = new QStandardItem(QString(vector[i].size));
-
         model->setItem(i,0,first1);
         model->setItem(i,1,first2);
         model->setItem(i,2,first3);
     }
-
-
-
     //===============================================================================
 */
 
@@ -81,7 +78,7 @@ void Archiver::on_file_button_clicked()
 
     ui->fileEdit->setText(fileName);
 
-    this->retrieveVersionDataForFile();
+    //this->retrieveVersionDataForFile();
 
     if(file_archiver.exists(fileName.toStdString()))
     {
@@ -102,10 +99,10 @@ void Archiver::on_file_button_clicked()
 void Archiver::on_save_button_clicked()
 {
 
-    bool saved = true;  // <------ to be removed once differ() works
+    //bool saved = true;  // <------ to be removed once differ() works
 
-    //if(FileArchiver::differs(fileName))  <------- uncomment this once done
-    if(saved)  // <------ to be removed once differ() works
+    //if(saved)  // <------ to be removed once differ() works
+    if(file_archiver.differs(fileName.toStdString()))
     {
         GetComment * comBox = new GetComment;
 
@@ -114,12 +111,9 @@ void Archiver::on_save_button_clicked()
 
         QString comment = comBox->return_comment();
 
-        //FileArchiver::update(fileName,comment);
-        //this->retrieveVersionDataForFile();
-
-
+        file_archiver.update(fileName.toStdString(),comment.toStdString());
+        this->retrieveVersionDataForFile();
     }
-
     else
     {
 
@@ -140,11 +134,13 @@ void Archiver::on_retrieve_button_clicked()
     //get the retrieved file name and directory chosen from retriever instance
     QString retname = retbox.get_name();
     QString directory = retbox.get_directory();
+    QString path = directory + "/" + retname;
+    
 
     //validation if a row is chosen
     if(version_number>=0)
     {
-        //FileArchiver::retrieveVersion(version_number,fileName,retname);
+        file_archiver.retrieveVersion(fileName.toStdString(),version_number,path.toStdString());
     }
 
 }
@@ -167,8 +163,8 @@ void Archiver::on_reference_button_clicked()
         //validation if there is a chosen version
         if(version_number>=0)
         {
-            //FileArchiver::setReference(fileName,version_number,comment);
-            //this->retrieveVersionDataForFile();
+            file_archiver.setReference(fileName.toStdString(),version_number,comment.toStdString());
+            this->retrieveVersionDataForFile();
         }
 
         
@@ -184,7 +180,7 @@ void Archiver::on_comment_button_clicked()
     //if there is a chosen row (default value for non-chosen is -1)
     if(version_number>=0)
     {
-        //display = QString::fromStdString(FileArchiver::getComment(fileName,version_number));
+        display = QString::fromStdString(file_archiver.getComment(fileName.toStdString(),version_number));
     }
 
     //prompt message box showing the comment
@@ -193,23 +189,24 @@ void Archiver::on_comment_button_clicked()
 }
 
 //get the version_number based on clicked row's index
-void Archiver::on_fileviewer_activated(const QModelIndex &index)
+/*void Archiver::on_fileviewer_activated(const QModelIndex &index)
 {
 
     std::vector<VersionInfo> x;
     x = file_archiver.getVersionInfo(fileName.toStdString());
     version_number = x[index.row()].versionnum;
+    QStandardItem *first2 = new QStandardItem(QString("ASD"));
+    model->setItem(1, 0, first2);
+}*/
 
-
-}
-
-
-
-//random vector populate for testing (REMOVE WHEN PROJECT DONE)
-void Archiver::populate()
+void Archiver::clickedModel(QModelIndex index)
 {
+    QMessageBox::information(NULL, "CLICKED",index.data().toString());
 
 }
+
+
+
 
 
 //get the versions and populate data based on vector from FileArchiver
@@ -242,7 +239,6 @@ void Archiver::retrieveVersionDataForFile()
         QStandardItem *first1 = new QStandardItem(QString(vector[i].version));
         QStandardItem *first2 = new QStandardItem(QString(vector[i].time));
         QStandardItem *first3 = new QStandardItem(QString(vector[i].size));
-
         model->setItem(i,0,first1);
         model->setItem(i,1,first2);
         model->setItem(i,2,first3);
@@ -292,4 +288,3 @@ void Archiver::createFirstVersion()
     file_archiver.insertNew(fileName.toStdString(),comment.toStdString());
     this->retrieveVersionDataForFile();
 }
-

@@ -37,7 +37,7 @@ public:
     bool differs(std::string);
     
     void insertNew(std::string, std::string);
-    void update(std::string);
+    void update(std::string, std::string);
     void retrieveVersion(std::string, int, std::string);
     
     std::string getComment(std::string, int);

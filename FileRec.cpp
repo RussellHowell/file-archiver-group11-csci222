@@ -231,7 +231,12 @@ void FileRec::setData(sql::Connection* conn)
             ++blknum;
             ++it2;
         }
-    }   
+    }
+    prepared_statement = conn->prepareStatement("INSERT INTO commentstable VALUES(?, ?, ?)");
+    prepared_statement->setString(1, filename_);
+    prepared_statement->setInt(2, 0);
+    prepared_statement->setString(3, commenttxt_.front());
+    prepared_statement->executeQuery();
     delete result;
     delete prepared_statement;
 }
@@ -270,12 +275,12 @@ void FileRec::createData(std::string file_name)
     temp_file.close();
 }
 
-VersionRec FileRec::createVersionData(FileRec current_save)
+VersionRec FileRec::createVersionData(FileRec current_save)//!!!!!!!!!!!!!!!!!!!!!!TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!
 {
     VersionRec update;
     std::vector<BlkTable> temp_blktable;
     BlkTable temp_blk;
-    QFile temp_file(filename_.c_str()); 
+    QFile temp_file(current_save.getFilename().c_str()); 
     if(!temp_file.open(QFile::ReadOnly))
     {
         throw (NO_FILE);
@@ -300,7 +305,7 @@ VersionRec FileRec::createVersionData(FileRec current_save)
     std::string hash;
     
     std::vector<std::pair<std::string, int> > hashes;
-    
+    //
     std::vector<int>::iterator length_it = current_save.getBlktableLength().begin();
     for(std::vector<std::string>::iterator it1 = current_save.getBlktableHash().begin(); it1 != current_save.getBlktableHash().end(); ++it1)
     {

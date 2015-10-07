@@ -34,7 +34,6 @@ FileArchiver::FileArchiver()
     driver_ = get_driver_instance();
     try
     {
-        
         conn_ = driver_->connect(DB_SERVER, DB_USERNAME, DB_PASSWORD);
     }
     catch(sql::SQLException &e)
@@ -110,14 +109,14 @@ bool FileArchiver::differs(std::string file_name)
     prepared_statement = conn_->prepareStatement("SELECT curhash FROM filerec WHERE filename = ?");
     prepared_statement->setString(1, file_name);
     result = prepared_statement->executeQuery();
-    std::string temp_result, temp_hash(temp_file.getCurhash());
+    std::string temp_result;
     while(result->next())
     {
         temp_result = result->getString(1);
     }
     delete result;
     delete prepared_statement;
-    return temp_hash == temp_result;
+    return temp_file.getCurhash() != temp_result;
 }
 
 
@@ -160,9 +159,10 @@ void FileArchiver::insertNew(std::string file_name, std::string comment)
     std::remove(zipped_file.c_str());
 }
 
-void FileArchiver::update(std::string file_name)
+void FileArchiver::update(std::string file_name, std::string comment)
 {
     FileRec current_save = getDetailsOfLastSaved(file_name);
+    qDebug() << current_save.getFilename().c_str();
     FileRec temp_file;
     VersionRec temp_version;
     temp_version = temp_file.createVersionData(current_save);
@@ -176,6 +176,12 @@ void FileArchiver::update(std::string file_name)
     prepared_statement->setString(1, temp_version.getOvhash());
     prepared_statement->setInt(2, temp_version.getLength());
     prepared_statement->setString(3, file_name);
+    prepared_statement->executeQuery();
+    
+    prepared_statement = conn_->prepareStatement("INSERT INTO commentstable VALUES(?, ?, ?)");
+    prepared_statement->setString(1, file_name);
+    prepared_statement->setInt(2, temp_version.getVersionnum());
+    prepared_statement->setString(3, comment);
     prepared_statement->executeQuery();
 }
 
@@ -444,5 +450,3 @@ std::string FileArchiver::unzipFile(std::string file_name)
     boost::iostreams::copy(in, unzipped_file);
     return file_name.substr(0, index);
 }
-
-

@@ -1,3 +1,14 @@
+/*DROP SCHEMA IF EXISTS `student25`;
+CREATE SCHEMA IF NOT EXISTS `student25` DEFAULT CHARACTER SET latin1 COLLATE
+latin1_swedish_ci;
+USE `filearchiver`;*/
+
+CREATE  TABLE IF NOT EXISTS `student25`.`blobtable`( 
+`tempname` INT(11) NOT NULL AUTO_INCREMENT, 
+`filedata` MEDIUMBLOB NOT NULL,
+PRIMARY KEY(`tempname`)) 
+ENGINE = InnoDB;
+
 CREATE  TABLE IF NOT EXISTS `student25`.`blobtable`(
 `tempname` INT(11) NOT NULL AUTO_INCREMENT,
 `filedata` MEDIUMBLOB NOT NULL,

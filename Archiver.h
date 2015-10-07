@@ -47,10 +47,12 @@ private slots:
     void on_reference_button_clicked();
 
     void on_comment_button_clicked();
+    
+    void clickedModel(QModelIndex index);
 
-    void on_fileviewer_activated(const QModelIndex &index);
+    //void on_fileviewer_activated(const QModelIndex &index);
 
-    void populate();
+    //void populate();
 
     void retrieveVersionDataForFile();
 

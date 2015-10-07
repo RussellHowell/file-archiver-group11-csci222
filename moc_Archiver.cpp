@@ -22,7 +22,7 @@ static const uint qt_meta_data_Archiver[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       9,   14, // methods
+       8,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -36,9 +36,8 @@ static const uint qt_meta_data_Archiver[] = {
       89,    9,    9,    9, 0x08,
      119,    9,    9,    9, 0x08,
      153,  147,    9,    9, 0x08,
-     190,    9,    9,    9, 0x08,
-     201,    9,    9,    9, 0x08,
-     230,    9,    9,    9, 0x08,
+     179,    9,    9,    9, 0x08,
+     208,    9,    9,    9, 0x08,
 
        0        // eod
 };
@@ -49,8 +48,8 @@ static const char qt_meta_stringdata_Archiver[] = {
     "on_retrieve_button_clicked()\0"
     "on_reference_button_clicked()\0"
     "on_comment_button_clicked()\0index\0"
-    "on_fileviewer_activated(QModelIndex)\0"
-    "populate()\0retrieveVersionDataForFile()\0"
+    "clickedModel(QModelIndex)\0"
+    "retrieveVersionDataForFile()\0"
     "createFirstVersion()\0"
 };
 
@@ -65,10 +64,9 @@ void Archiver::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
         case 2: _t->on_retrieve_button_clicked(); break;
         case 3: _t->on_reference_button_clicked(); break;
         case 4: _t->on_comment_button_clicked(); break;
-        case 5: _t->on_fileviewer_activated((*reinterpret_cast< const QModelIndex(*)>(_a[1]))); break;
-        case 6: _t->populate(); break;
-        case 7: _t->retrieveVersionDataForFile(); break;
-        case 8: _t->createFirstVersion(); break;
+        case 5: _t->clickedModel((*reinterpret_cast< QModelIndex(*)>(_a[1]))); break;
+        case 6: _t->retrieveVersionDataForFile(); break;
+        case 7: _t->createFirstVersion(); break;
         default: ;
         }
     }
@@ -106,9 +104,9 @@ int Archiver::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 9)
+        if (_id < 8)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 9;
+        _id -= 8;
     }
     return _id;
 }
