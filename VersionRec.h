@@ -38,10 +38,10 @@ public:
     void setVersionnum(int);
     int getLength();
     void setLength(int);
-    int getMtsec();
-    void setMtsec(int);
-    int getMtnsec();
-    void setMtnsec(int);
+    long getMtsec();
+    void setMtsec(long);
+    long getMtnsec();
+    void setMtnsec(long);
     std::string getOvhash();
     void setOvhash(std::string);
     std::vector<BlkTable> getBlktable();

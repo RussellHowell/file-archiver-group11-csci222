@@ -85,22 +85,22 @@ void FileRec::setLength(int length)
     length_ = length;
 }
 
-int FileRec::getMtsec()
+long FileRec::getMtsec()
 {
     return mtsec_;
 }
 
-void FileRec::setMtsec(int mtsec)
+void FileRec::setMtsec(long mtsec)
 {
     mtsec_ = mtsec;
 }
 
-int FileRec::getMtnsec()
+long FileRec::getMtnsec()
 {
     return mtnsec_;
 }
 
-void FileRec::setMtnsec(int mtnsec)
+void FileRec::setMtnsec(long mtnsec)
 {
     mtnsec_ = mtnsec;
 }
@@ -273,12 +273,72 @@ void FileRec::createData(std::string file_name)
         blktable_length_.push_back(buffer.length());
     }
     curhash_ = ov_crypto.result().toHex().data();
-    qDebug() << curhash_.c_str();
     
     ovhash_ = curhash_;
     temp_file.close();
 }
 
+
+VersionRec FileRec::createVersionData(FileRec current_save)
+{
+    
+    VersionRec update;
+    std::vector <BlkTable> temp_blktable;
+    
+     QFile temp_file(current_save.getFilename().c_str()); 
+    if(!temp_file.open(QFile::ReadOnly))
+    {
+        throw (NO_FILE);
+    };
+    boost::chrono::system_clock::time_point current_time = boost::chrono::system_clock::now();
+    boost::chrono::seconds sec = boost::chrono::time_point_cast<boost::chrono::seconds> (current_time).time_since_epoch();
+    boost::chrono::nanoseconds nanosec = current_time.time_since_epoch();
+    update.setMtsec(sec.count());
+    update.setMtsec(nanosec.count() %  sec.count());
+   
+    update.setLength(temp_file.size());
+    update.setFileref(temp_file.fileName().toStdString());
+    
+    update.setVersionnum(current_save.getNversions() + 1);
+    
+    QCryptographicHash blk_crypto(QCryptographicHash::Sha1);
+    QCryptographicHash ov_crypto(QCryptographicHash::Sha1);
+    
+    QByteArray buffer;
+    
+    int counter = 0;
+    while(!temp_file.atEnd())
+    {
+        buffer = const_cast<QFile&>(temp_file).read(BLOCKSIZE);
+        ov_crypto.addData(buffer, buffer.size());
+        //blktable_length_.push_back(buffer.length());
+        
+        
+        
+        buffer = const_cast<QFile&>(temp_file).read(BLOCKSIZE);
+        ov_crypto.addData(buffer);
+        std::string hash = blk_crypto.hash(buffer, QCryptographicHash::Sha1).toHex().data();
+        
+        BlkTable temp_blk;
+        temp_blk.blknum = ++counter;
+        temp_blk.data = qCompress(buffer.toHex().data());
+        temp_blk.hash = hash;
+        temp_blk.length = buffer.size();
+        temp_blktable.push_back(temp_blk);
+      
+    }
+    
+    curhash_ = ov_crypto.result().toHex().data();
+    
+    update.setBlktable(temp_blktable);
+    update.setOvhash(ov_crypto.result().toHex().data());
+    temp_file.close();
+    
+    return update;
+}
+
+
+/*
 VersionRec FileRec::createVersionData(FileRec current_save)//!!!!!!!!!!!!!!!!!!!!!!TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!
 {
     VersionRec update;
@@ -317,11 +377,12 @@ VersionRec FileRec::createVersionData(FileRec current_save)//!!!!!!!!!!!!!!!!!!!
             std::pair<std::string, int> temp_pair;
             temp_pair.first = *it1;
             temp_pair.second = *length_it;
-            hashes .push_back(temp_pair);
+            hashes.push_back(temp_pair);
         }
         else
         {
             temp_blk.blknum = it1 - current_save.getBlktableHash().begin();
+            qDebug() << temp_blk.blknum;
             temp_blk.data = NULL;
             temp_blk.hash = *it1;
             temp_blk.length = 0;
@@ -334,7 +395,7 @@ VersionRec FileRec::createVersionData(FileRec current_save)//!!!!!!!!!!!!!!!!!!!
     {
         buffer = const_cast<QFile&>(temp_file).read(BLOCKSIZE);
         ov_crypto.addData(buffer);
-        hash = blk_crypto.hash(buffer, QCryptographicHash::Sha1).data();
+        hash = blk_crypto.hash(buffer, QCryptographicHash::Sha1).toHex().data();
         if(it1->first != hash)
         {
             pos = temp_file.pos();
@@ -342,7 +403,7 @@ VersionRec FileRec::createVersionData(FileRec current_save)//!!!!!!!!!!!!!!!!!!!
         while(it1->second != pos)
         {
             temp_blk.blknum = it1->second;
-            temp_blk.data = qCompress(buffer);
+            temp_blk.data = qCompress(buffer.toHex().data());
             temp_blk.hash = hash;
             temp_blk.length = buffer.size();
             temp_blktable.push_back(temp_blk);
@@ -353,3 +414,4 @@ VersionRec FileRec::createVersionData(FileRec current_save)//!!!!!!!!!!!!!!!!!!!
     temp_file.close();
     return update;
 }
+*/

@@ -59,22 +59,22 @@ void VersionRec::setLength(int length)
     length_ = length;
 }
 
-int VersionRec::getMtsec()
+long VersionRec::getMtsec()
 {
     return mtsec_;
 }
 
-void VersionRec::setMtsec(int mtsec)
+void VersionRec::setMtsec(long mtsec)
 {
     mtsec_ = mtsec;
 }
 
-int VersionRec::getMtnsec()
+long VersionRec::getMtnsec()
 {
     return idversionrec_;
 }
 
-void VersionRec::setMtnsec(int mtnsec)
+void VersionRec::setMtnsec(long mtnsec)
 {
     mtnsec_ = mtnsec;
 }
@@ -145,17 +145,17 @@ void VersionRec::setData(sql::Connection* conn)
     prepared_statement->setInt(6, mtnsec_);
     prepared_statement->setString(7, ovhash_);
     prepared_statement->executeQuery();
-    prepared_statement = conn->prepareStatement("SELECT LAST_INSERT_ID()");
+    /*prepared_statement = conn->prepareStatement("SELECT LAST_INSERT_ID()");
     result = prepared_statement->executeQuery();
     int version_id;
     while(result->next())
     {
         version_id = result->getInt(1);
-    }
+    }*/
     for(std::vector<BlkTable>::iterator it1 = blktable_.begin(); it1 != blktable_.end(); ++it1)
     {
         sql::PreparedStatement *prepared_statement = conn->prepareStatement("INSERT INTO blktable VALUES(?, ?, ?, ?, ?)");
-        prepared_statement->setInt(1, version_id);
+        prepared_statement->setInt(1, counter_);
         prepared_statement->setInt(2, it1->blknum);
         prepared_statement->setInt(3, it1->length);
         prepared_statement->setString(4, it1->hash);

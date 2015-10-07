@@ -321,7 +321,7 @@ std::vector<VersionInfo> FileArchiver::getVersionInfo(std::string file_name)
     sql::PreparedStatement *prepared_statement = NULL;
     for(std::vector<int>::iterator it = version_ids.begin(); it != version_ids.end(); ++it)
     {
-        prepared_statement = conn_->prepareStatement("SELECT versionnum, length, mtsec, mtnsec FROM versionrec WHERE versionid = ?");
+        prepared_statement = conn_->prepareStatement("SELECT versionnum, length, mtsec, mtnsec FROM versionrec WHERE idversionrec = ?");
         prepared_statement->setInt(1, *it);
         result = prepared_statement->executeQuery();
         if(result->next())

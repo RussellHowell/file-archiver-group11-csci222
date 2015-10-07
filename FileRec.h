@@ -33,10 +33,10 @@ public:
     void setNversions(int);
     int getLength();
     void setLength(int);
-    int getMtsec();
-    void setMtsec(int);
-    int getMtnsec();
-    void setMtnsec(int);
+    long getMtsec();
+    void setMtsec(long);
+    long getMtnsec();
+    void setMtnsec(long);
     int getBlobtableTempname();
     void setBlobtableTempname(int);
     std::vector<std::string> getBlktableHash();
@@ -60,8 +60,8 @@ private:
     int currentversion_;
     int nversions_;
     int length_;
-    int mtsec_;
-    int mtnsec_;
+    long mtsec_;
+    long mtnsec_;
     int blobtable_tempname_;
     std::vector<std::string> blktable_hashval_;
     std::vector<int> blktable_length_;
