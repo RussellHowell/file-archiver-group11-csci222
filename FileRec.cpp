@@ -258,19 +258,23 @@ void FileRec::createData(std::string file_name)
     length_ = temp_file.size();
     filename_ = temp_file.fileName().toStdString();
     
-    QCryptographicHash blk_crypto(QCryptographicHash::Md5);
-    QCryptographicHash ov_crypto(QCryptographicHash::Md5);
-    
+    QCryptographicHash blk_crypto(QCryptographicHash::Sha1);
+    QCryptographicHash ov_crypto(QCryptographicHash::Sha1);
+   
     QByteArray buffer;
+    
+    
     
     while(!temp_file.atEnd())
     {
         buffer = const_cast<QFile&>(temp_file).read(BLOCKSIZE);
-        ov_crypto.addData(buffer);
-        blktable_hashval_.push_back(blk_crypto.hash(buffer, QCryptographicHash::Md5).data());
+        ov_crypto.addData(buffer, buffer.size());
+        blktable_hashval_.push_back(blk_crypto.hash(buffer, QCryptographicHash::Sha1).data());
         blktable_length_.push_back(buffer.length());
     }
-    curhash_ = ov_crypto.result().data();
+    curhash_ = ov_crypto.result().toHex().data();
+    qDebug() << curhash_.c_str();
+    
     ovhash_ = curhash_;
     temp_file.close();
 }
@@ -297,15 +301,14 @@ VersionRec FileRec::createVersionData(FileRec current_save)//!!!!!!!!!!!!!!!!!!!
     
     update.setVersionnum(current_save.getNversions() + 1);
     
-    QCryptographicHash blk_crypto(QCryptographicHash::Md5);
-    QCryptographicHash ov_crypto(QCryptographicHash::Md5);
+    QCryptographicHash blk_crypto(QCryptographicHash::Sha1);
+    QCryptographicHash ov_crypto(QCryptographicHash::Sha1);
     
     QByteArray buffer;
     
     std::string hash;
     
     std::vector<std::pair<std::string, int> > hashes;
-    //
     std::vector<int>::iterator length_it = current_save.getBlktableLength().begin();
     for(std::vector<std::string>::iterator it1 = current_save.getBlktableHash().begin(); it1 != current_save.getBlktableHash().end(); ++it1)
     {
@@ -314,7 +317,7 @@ VersionRec FileRec::createVersionData(FileRec current_save)//!!!!!!!!!!!!!!!!!!!
             std::pair<std::string, int> temp_pair;
             temp_pair.first = *it1;
             temp_pair.second = *length_it;
-            hashes.push_back(temp_pair);
+            hashes .push_back(temp_pair);
         }
         else
         {
@@ -331,7 +334,7 @@ VersionRec FileRec::createVersionData(FileRec current_save)//!!!!!!!!!!!!!!!!!!!
     {
         buffer = const_cast<QFile&>(temp_file).read(BLOCKSIZE);
         ov_crypto.addData(buffer);
-        hash = blk_crypto.hash(buffer, QCryptographicHash::Md5).data();
+        hash = blk_crypto.hash(buffer, QCryptographicHash::Sha1).data();
         if(it1->first != hash)
         {
             pos = temp_file.pos();
